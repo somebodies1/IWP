@@ -6,5 +6,7 @@ public class BattleManager : MonoBehaviour
 {
     private BaseEntity[] entityList;
 
+    //Turns always start with player
+
 
 }
