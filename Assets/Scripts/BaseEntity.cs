@@ -26,13 +26,11 @@ public class BaseEntity : MonoBehaviour
     //Type of entity
     public ENTITY_TYPE entityType;
 
-    public bool isDead = false;
+    public GameObject HealthBar;
 
-    public BaseEntity(string _name, int _hp, int _mp, ENTITY_TYPE _type)
+    public void UpdateHealthBar()
     {
-        entityName = _name;
-        MaxHP = CurrentHP = _hp;
-        MaxMP = CurrentMP = _mp;
-        entityType = _type;
+        float currentToMaxHealthRatio = (float)CurrentHP / (float)MaxHP;
+        HealthBar.transform.localScale = new Vector3(currentToMaxHealthRatio, 1, 1);
     }
 }
