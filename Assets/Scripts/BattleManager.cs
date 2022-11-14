@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    public UIManager uiManager;
+
     public List<GameObject> playerCharList;
     public List<GameObject> enemiesList;
 
@@ -86,10 +88,19 @@ public class BattleManager : MonoBehaviour
     {
         BaseEntity baseEntity = _targetGO.GetComponent<BaseEntity>();
 
-        baseEntity.CurrentHP -= 10;
-        baseEntity.UpdateHealthBar();
+        if (currentCharacterTurn.GetComponent<BaseEntity>().AttackAnimation())
+        {
+            uiManager.DeactivateActionUI();
 
-        NextPlayerTurn();
+            StartCoroutine(WaitForAnimation(_targetGO));
+        }
+        else
+        {
+            baseEntity.CurrentHP -= 10;
+            baseEntity.UpdateHealthBar();
+
+            NextPlayerTurn();
+        }
     }
 
     public void EnemyAttack(GameObject _targetGO)
@@ -103,5 +114,24 @@ public class BattleManager : MonoBehaviour
     private void CurrentTurnCheck()
     {
         Debug.Log("Current Turn: " + currentCharacterTurn);
+    }
+
+    IEnumerator WaitForAnimation(GameObject _targetGO)
+    {
+        BaseEntity baseEntity = _targetGO.GetComponent<BaseEntity>();
+
+        Debug.Log("AttackAnimTime: " + currentCharacterTurn.GetComponent<BaseEntity>().animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+
+        yield return new WaitForSeconds(currentCharacterTurn.GetComponent<BaseEntity>().animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+
+        Debug.Log("anim end");
+
+        baseEntity.CurrentHP -= 10;
+        baseEntity.UpdateHealthBar();
+
+        uiManager.ActivateActionUI();
+        uiManager.SwitchAttackUIByName("ActionUI");
+
+        NextPlayerTurn();
     }
 }

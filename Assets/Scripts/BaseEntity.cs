@@ -28,9 +28,29 @@ public class BaseEntity : MonoBehaviour
 
     public GameObject HealthBar;
 
+    public Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     public void UpdateHealthBar()
     {
         float currentToMaxHealthRatio = (float)CurrentHP / (float)MaxHP;
         HealthBar.transform.localScale = new Vector3(currentToMaxHealthRatio, 1, 1);
+    }
+
+    public bool AttackAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+            Debug.Log("AttackAnimTime: " + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+
+            return true;
+        }
+
+        return false;
     }
 }
