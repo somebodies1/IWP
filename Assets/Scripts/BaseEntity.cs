@@ -23,6 +23,11 @@ public class BaseEntity : MonoBehaviour
     public int MaxMP;
     public int CurrentMP;
 
+    //Combat Stats
+    public float attackStat = 10.0f;
+    public float defStat = 5.0f;
+
+
     //Type of entity
     public ENTITY_TYPE entityType;
 
@@ -35,6 +40,14 @@ public class BaseEntity : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+    }
+
+    public void CalculateDamage(BaseEntity targetGO)
+    {
+        int totalDmg = (int)(attackStat - targetGO.defStat);
+
+        targetGO.CurrentHP -= totalDmg;
+        targetGO.UpdateHealthBar();
     }
 
     public void UpdateHealthBar()

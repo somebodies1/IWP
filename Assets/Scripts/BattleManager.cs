@@ -86,17 +86,17 @@ public class BattleManager : MonoBehaviour
 
     public void PlayerAttack(GameObject _targetGO)
     {
-        BaseEntity baseEntity = _targetGO.GetComponent<BaseEntity>();
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
 
-        if (currentCharacterTurn.GetComponent<BaseEntity>().AttackAnimation())
+        if (currentCharacterGO.AttackAnimation())
         {
             uiManager.DeactivateActionUI();
             StartCoroutine(WaitForAnimation(_targetGO));
         }
         else
         {
-            baseEntity.CurrentHP -= 10;
-            baseEntity.UpdateHealthBar();
+            BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
+            currentCharacterGO.CalculateDamage(targetGO);
 
             NextPlayerTurn();
         }
@@ -106,10 +106,10 @@ public class BattleManager : MonoBehaviour
 
     public void EnemyAttack(GameObject _targetGO)
     {
-        BaseEntity baseEntity = _targetGO.GetComponent<BaseEntity>();
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+        BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
 
-        baseEntity.CurrentHP -= 10;
-        baseEntity.UpdateHealthBar();
+        currentCharacterGO.CalculateDamage(targetGO);
     }
 
     private void CurrentTurnCheck()
@@ -119,13 +119,13 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator WaitForAnimation(GameObject _targetGO)
     {
-        BaseEntity baseEntity = _targetGO.GetComponent<BaseEntity>();
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+        BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
 
         //Wait for animation to end
-        yield return new WaitForSeconds(currentCharacterTurn.GetComponent<BaseEntity>().attackClip.length);
+        yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
 
-        baseEntity.CurrentHP -= 10;
-        baseEntity.UpdateHealthBar();
+        currentCharacterGO.CalculateDamage(targetGO);
 
         uiManager.ActivateActionUI();
 
