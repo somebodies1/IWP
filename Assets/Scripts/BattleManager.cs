@@ -22,6 +22,7 @@ public class BattleManager : MonoBehaviour
     //Switch to player's turn
     private void SwitchToPlayerTurn()
     {
+        uiManager.ActivateActionUI();
         playerCharList[0].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
         currentCharacterTurn = playerCharList[0];
     }
@@ -37,13 +38,14 @@ public class BattleManager : MonoBehaviour
 
         Debug.Log("PlayCharIndex: " + currentPlayerCharIndex + " CharListIndex: " + playerCharList.Count);
 
-        //Switch to next player's character's turn
         if (currentPlayerCharIndex >=  playerCharList.Count - 1)
         {
+            //Switch to enemies' turn
             SwitchToEnemyTurn();
         }
         else
         {
+            //Switch to next player's character's turn
             playerCharList[currentPlayerCharIndex + 1].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
             currentCharacterTurn = playerCharList[currentPlayerCharIndex + 1];
         }
@@ -52,6 +54,7 @@ public class BattleManager : MonoBehaviour
     //Switch to enemy's turn
     private void SwitchToEnemyTurn()
     {
+        uiManager.DeactivateActionUI();
         enemiesList[0].GetComponent<EnemyFSM>().SetCurrentState(EnemyFSM.TURN_STATE.WAITING);
         currentCharacterTurn = enemiesList[0];
 
@@ -64,12 +67,14 @@ public class BattleManager : MonoBehaviour
         CurrentTurnCheck();
 
         EnemyAttack(currentCharacterTurn.GetComponent<EnemyFSM>().targetGO);
+    }
+
+    private void NextEnemyTurnConditions()
+    {
         currentCharacterTurn.GetComponent<EnemyFSM>().SetCurrentState(EnemyFSM.TURN_STATE.TURN_ENDED);
 
         int currentEnemyIndex = enemiesList.IndexOf(currentCharacterTurn);
 
-        Debug.Log("CurrentEnemyIndex: " + currentEnemyIndex + " EnemyListIndex: " + enemiesList.Count);
-        
         //Switch to next enemy's turn
         if (currentEnemyIndex >= enemiesList.Count - 1)
         {
@@ -79,7 +84,7 @@ public class BattleManager : MonoBehaviour
         {
             enemiesList[currentEnemyIndex + 1].GetComponent<EnemyFSM>().SetCurrentState(EnemyFSM.TURN_STATE.WAITING);
             currentCharacterTurn = enemiesList[currentEnemyIndex + 1];
-            
+
             NextEnemyTurn();
         }
     }
@@ -91,7 +96,7 @@ public class BattleManager : MonoBehaviour
         if (currentCharacterGO.BaseEntityAnimation(BaseEntity.ANIMATION.ATTACK))
         {
             uiManager.DeactivateActionUI();
-            StartCoroutine(WaitForAnimation(_targetGO));
+            StartCoroutine(WaitForPlayerAnimation(_targetGO));
         }
         else
         {
@@ -107,9 +112,16 @@ public class BattleManager : MonoBehaviour
     public void EnemyAttack(GameObject _targetGO)
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
-        BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
 
-        currentCharacterGO.CalculateDamage(targetGO);
+        if (currentCharacterGO.BaseEntityAnimation(BaseEntity.ANIMATION.ATTACK))
+        {
+            StartCoroutine(WaitForEnemyAnimation(_targetGO));
+        }
+        else
+        {
+            BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
+            currentCharacterGO.CalculateDamage(targetGO);
+        }
     }
 
     private void CurrentTurnCheck()
@@ -117,7 +129,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Current Turn: " + currentCharacterTurn);
     }
 
-    IEnumerator WaitForAnimation(GameObject _targetGO)
+    IEnumerator WaitForPlayerAnimation(GameObject _targetGO)
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
         BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
@@ -130,5 +142,18 @@ public class BattleManager : MonoBehaviour
         uiManager.ActivateActionUI();
 
         NextPlayerTurn();
+    }
+
+    IEnumerator WaitForEnemyAnimation(GameObject _targetGO)
+    {
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+        BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
+
+        //Wait for animation to end
+        yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
+
+        currentCharacterGO.CalculateDamage(targetGO);
+
+        NextEnemyTurnConditions();
     }
 }
