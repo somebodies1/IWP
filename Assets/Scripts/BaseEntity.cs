@@ -29,6 +29,8 @@ public class BaseEntity : MonoBehaviour
     public GameObject HealthBar;
 
     public Animator animator;
+    public AnimationClip idleClip;
+    public AnimationClip attackClip;
 
     private void Start()
     {
@@ -47,7 +49,7 @@ public class BaseEntity : MonoBehaviour
         {
             animator.SetTrigger("Attack");
             Debug.Log("AttackAnimTime: " + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-
+            Debug.Log("attackClip: " + attackClip.length);
             return true;
         }
 

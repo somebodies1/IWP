@@ -91,7 +91,6 @@ public class BattleManager : MonoBehaviour
         if (currentCharacterTurn.GetComponent<BaseEntity>().AttackAnimation())
         {
             uiManager.DeactivateActionUI();
-
             StartCoroutine(WaitForAnimation(_targetGO));
         }
         else
@@ -101,6 +100,8 @@ public class BattleManager : MonoBehaviour
 
             NextPlayerTurn();
         }
+
+        uiManager.SwitchAttackUIByName("ActionUI");
     }
 
     public void EnemyAttack(GameObject _targetGO)
@@ -120,17 +121,13 @@ public class BattleManager : MonoBehaviour
     {
         BaseEntity baseEntity = _targetGO.GetComponent<BaseEntity>();
 
-        Debug.Log("AttackAnimTime: " + currentCharacterTurn.GetComponent<BaseEntity>().animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-
-        yield return new WaitForSeconds(currentCharacterTurn.GetComponent<BaseEntity>().animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-
-        Debug.Log("anim end");
+        //Wait for animation to end
+        yield return new WaitForSeconds(currentCharacterTurn.GetComponent<BaseEntity>().attackClip.length);
 
         baseEntity.CurrentHP -= 10;
         baseEntity.UpdateHealthBar();
 
         uiManager.ActivateActionUI();
-        uiManager.SwitchAttackUIByName("ActionUI");
 
         NextPlayerTurn();
     }

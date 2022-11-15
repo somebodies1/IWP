@@ -296,6 +296,8 @@ MonoBehaviour:
   entityType: 0
   HealthBar: {fileID: 2098861740}
   animator: {fileID: 0}
+  idleClip: {fileID: 0}
+  attackClip: {fileID: 0}
 --- !u!1 &136046083
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,6 +408,8 @@ MonoBehaviour:
   entityType: 0
   HealthBar: {fileID: 1583365003}
   animator: {fileID: 1784424513}
+  idleClip: {fileID: 0}
+  attackClip: {fileID: 0}
 --- !u!65 &137562789
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3824,6 +3828,8 @@ MonoBehaviour:
   entityType: 1
   HealthBar: {fileID: 1116985663}
   animator: {fileID: 1784424513}
+  idleClip: {fileID: 0}
+  attackClip: {fileID: 0}
 --- !u!65 &1427023692
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4061,6 +4067,8 @@ MonoBehaviour:
   entityType: 1
   HealthBar: {fileID: 1601982338}
   animator: {fileID: 1784424513}
+  idleClip: {fileID: 0}
+  attackClip: {fileID: 0}
 --- !u!1 &1583365003
 GameObject:
   m_ObjectHideFlags: 0
@@ -4797,6 +4805,8 @@ MonoBehaviour:
   entityType: 0
   HealthBar: {fileID: 2098861740}
   animator: {fileID: 1784424513}
+  idleClip: {fileID: 7400000, guid: 083c3917822dd164fafb1a91883fbff8, type: 2}
+  attackClip: {fileID: 7400000, guid: 33a3f6352f52f9d45bdf449c4ecf1953, type: 2}
 --- !u!1 &1955259324
 GameObject:
   m_ObjectHideFlags: 0
