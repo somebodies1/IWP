@@ -12,6 +12,13 @@ public class BaseEntity : MonoBehaviour
         ENTITY_TYPE_NUM
     }
 
+    public enum ANIMATION
+    {
+        IDLE,
+        ATTACK,
+        ANIMATION_NUM
+    }
+
     //Name
     public string entityName;
 
@@ -56,13 +63,19 @@ public class BaseEntity : MonoBehaviour
         HealthBar.transform.localScale = new Vector3(currentToMaxHealthRatio, 1, 1);
     }
 
-    public bool AttackAnimation()
+    public bool BaseEntityAnimation(ANIMATION _anim)
     {
         if (animator != null)
         {
-            animator.SetTrigger("Attack");
-            Debug.Log("AttackAnimTime: " + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-            Debug.Log("attackClip: " + attackClip.length);
+            switch (_anim)
+            {
+                case ANIMATION.IDLE:
+                    break;
+                case ANIMATION.ATTACK:
+                    animator.SetTrigger("Attack");
+                    break;
+            }
+
             return true;
         }
 

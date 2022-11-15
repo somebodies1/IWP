@@ -88,7 +88,7 @@ public class BattleManager : MonoBehaviour
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
 
-        if (currentCharacterGO.AttackAnimation())
+        if (currentCharacterGO.BaseEntityAnimation(BaseEntity.ANIMATION.ATTACK))
         {
             uiManager.DeactivateActionUI();
             StartCoroutine(WaitForAnimation(_targetGO));
