@@ -16,12 +16,12 @@ public class BaseEntity : MonoBehaviour
     public string entityName;
 
     //Health
-    public int MaxHP;
-    public int CurrentHP;
+    public int MaxHP = 100;
+    public int CurrentHP = 100;
 
     //Mana
-    public int MaxMP;
-    public int CurrentMP;
+    public int MaxMP = 100;
+    public int CurrentMP = 100;
 
     //Combat Stats
     public float attackStat = 10.0f;
