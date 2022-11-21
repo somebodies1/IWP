@@ -34,6 +34,8 @@ public class BaseEntity : MonoBehaviour
     public float attackStat = 10.0f;
     public float defStat = 5.0f;
 
+    //Skills
+    public List<Skill> skillList;
 
     //Type of entity
     public ENTITY_TYPE entityType;
@@ -47,6 +49,7 @@ public class BaseEntity : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+        Debug.Log("rotation: " + this.gameObject.transform.rotation.eulerAngles);
     }
 
     public void CalculateDamage(BaseEntity targetGO)
