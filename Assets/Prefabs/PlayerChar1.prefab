@@ -1277,7 +1277,7 @@ Transform:
   - {fileID: 4419384208552544948}
   - {fileID: 710822962758223769}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!95 &8030137909464689728
 Animator:
@@ -1326,14 +1326,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e4e72be98d25f418e61d600c2447dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityName: 
+  entityName: Arisa
   MaxHP: 100
   CurrentHP: 100
   MaxMP: 100
   CurrentMP: 100
   attackStat: 10
   defStat: 5
-  skillList: []
+  skillList:
+  - {fileID: 6829126373135754670, guid: fa9087c09bf71ac4ab6750c1fe977b31, type: 3}
+  - {fileID: 1073822475101312777, guid: 1481cc4bf363f8145a5495a4aa41ff84, type: 3}
   entityType: 0
   HealthBar: {fileID: 0}
   animator: {fileID: 8030137909464689728}

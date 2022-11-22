@@ -6,5 +6,13 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
     public string skillName = "Skill";
+    public Temperament skillType = Temperament.FIRE;
     public int skillStrength = 10;
+
+    public void OverwriteSkill(Skill _newSkill)
+    {
+        skillName = _newSkill.skillName;
+        skillType = _newSkill.skillType;
+        skillStrength = _newSkill.skillStrength;
+    }
 }

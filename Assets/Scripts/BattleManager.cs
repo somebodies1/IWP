@@ -15,7 +15,12 @@ public class BattleManager : MonoBehaviour
     private void Start()
     {
         playerCharList.AddRange(GameObject.FindGameObjectsWithTag("PlayerChar"));
+
+        //Generate UI stuff
+        uiManager.SpawnAllSkillButtons(playerCharList);
+
         enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+
         SwitchToPlayerTurn();
     }
 
@@ -155,5 +160,15 @@ public class BattleManager : MonoBehaviour
         currentCharacterGO.CalculateDamage(targetGO);
 
         NextEnemyTurnConditions();
+    }
+
+    public void SwitchToCurrentPlayerCharSkills()
+    {
+        BaseEntity currentEntity = currentCharacterTurn.GetComponent<BaseEntity>();
+
+        if (currentEntity.entityType != BaseEntity.ENTITY_TYPE.PLAYER)
+            return;
+
+        uiManager.SwitchCurrentPlayerSkillsUIByName(currentEntity.entityName);
     }
 }
