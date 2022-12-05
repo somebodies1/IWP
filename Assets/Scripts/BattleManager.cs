@@ -122,7 +122,7 @@ public class BattleManager : MonoBehaviour
         if (currentCharacterGO.BaseEntityAnimation(_animation))
         {
             uiManager.DeactivateActionUI();
-            StartCoroutine(WaitForPlayerAnimation(_targetGO.gameObject));
+            StartCoroutine(WaitForPlayerAnimation(_targetGO.gameObject, _animation));
         }
         else
         {
@@ -134,46 +134,6 @@ public class BattleManager : MonoBehaviour
 
         uiManager.SwitchAttackUIByName("ActionUI");
     }
-
-    //public void PlayerAttack(GameObject _targetGO)
-    //{
-    //    BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
-
-    //    if (currentCharacterGO.BaseEntityAnimation(BaseEntity.ANIMATION.ATTACK))
-    //    {
-    //        uiManager.DeactivateActionUI();
-    //        StartCoroutine(WaitForPlayerAnimation(_targetGO));
-    //    }
-    //    else
-    //    {
-    //        BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
-    //        currentCharacterGO.CalculateDamage(targetGO);
-
-    //        NextPlayerTurn();
-    //    }
-
-    //    uiManager.SwitchAttackUIByName("ActionUI");
-    //}
-
-    //public void PlayerSkill(Skill _skill)
-    //{
-    //    BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
-
-    //    if (currentCharacterGO.BaseEntityAnimation(BaseEntity.ANIMATION.ATTACK))
-    //    {
-    //        uiManager.DeactivateActionUI();
-    //        StartCoroutine(WaitForPlayerAnimation(_targetGO));
-    //    }
-    //    else
-    //    {
-    //        BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
-    //        currentCharacterGO.CalculateDamage(targetGO);
-
-    //        NextPlayerTurn();
-    //    }
-
-    //    uiManager.SwitchAttackUIByName("ActionUI");
-    //}
 
     public void EnemyAttack(GameObject _targetGO)
     {
@@ -195,23 +155,33 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Current Turn: " + currentCharacterTurn);
     }
 
-    IEnumerator WaitForPlayerAnimation(GameObject _targetGO)
+    IEnumerator WaitForPlayerAnimation(GameObject _targetGO, BaseEntity.ANIMATION _animation)
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
         BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
 
         Vector3 oldCCPos = currentCharacterTurn.transform.position;
-        currentCharacterTurn.transform.position = new Vector3(_targetGO.transform.position.x - 1, oldCCPos.y, _targetGO.transform.position.z);
-
+        
         //Wait for animation to end
-        yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
+        switch (_animation)
+        {
+            case BaseEntity.ANIMATION.ATTACK:
+                currentCharacterTurn.transform.position = new Vector3(_targetGO.transform.position.x - 1, oldCCPos.y, _targetGO.transform.position.z);
 
-        currentCharacterTurn.transform.position = oldCCPos;
+                yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
+
+                currentCharacterTurn.transform.position = oldCCPos;
+                break;
+            case BaseEntity.ANIMATION.SKILL:
+                yield return new WaitForSeconds(currentCharacterGO.skillClip.length);
+                break;
+        }
 
         currentCharacterGO.CalculateDamage(targetGO);
 
         uiManager.ActivateActionUI();
 
+        currentCharacterGO.currentSkill = null;
         NextPlayerTurn();
     }
 

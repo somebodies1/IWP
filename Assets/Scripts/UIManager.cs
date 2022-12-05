@@ -14,11 +14,11 @@ public class UIManager : MonoBehaviour
     public GameObject skillsUI;
     public GameObject targetSelectionUI;
 
+    public GameObject switchSkillsButton;
+
     //Prefabs
     public GameObject emptyGOUIPrefab;
     public GameObject skillButton;
-
-    
 
     public void ActivateActionUI()
     {
@@ -101,5 +101,10 @@ public class UIManager : MonoBehaviour
 
         SkillButton.GetComponent<Button>().onClick.AddListener(delegate { battleManager.OnButtonPlayerSkill(SkillButton.GetComponent<Skill>()); });
         SkillButton.GetComponent<Button>().onClick.AddListener(delegate { SwitchAttackUI(targetSelectionUI); });
+    }
+
+    public void OnButtonSkillSwitch()
+    {
+        SwitchCurrentPlayerSkillsUIByName(battleManager.currentCharacterTurn.GetComponent<BaseEntity>().entityName);
     }
 }

@@ -27,6 +27,18 @@ public class BaseEntity : MonoBehaviour
         ACTION_NUM
     }
 
+    public enum TEMPERAMENT
+    {
+        NONE,
+        FIRE,
+        WATER,
+        EARTH,
+        SKY,
+        SUN,
+        MOON,
+        NUM_TEMPERAMENT
+    }
+
     //Name
     public string entityName;
 
@@ -51,34 +63,78 @@ public class BaseEntity : MonoBehaviour
 
     //Type of entity
     public ENTITY_TYPE entityType;
+    public List<int> tpWeaknessList; //-1 Weak  0 Neutral  1 Strong
 
     public GameObject HealthBar;
 
     public Animator animator;
     public AnimationClip idleClip;
     public AnimationClip attackClip;
+    public AnimationClip skillClip;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        Debug.Log("rotation: " + this.gameObject.transform.rotation.eulerAngles);
+        //Debug.Log("rotation: " + this.gameObject.transform.rotation.eulerAngles);
     }
 
-    public void CalculateDamage(BaseEntity targetGO)
+    float CompareTemperament(BaseEntity _targetGO, TEMPERAMENT _tpAttack = TEMPERAMENT.NONE)
     {
-        int totalDmg = (int)(attackStat - targetGO.defStat);
-        switch (currentAction)
+        //Get enemy's weakness of specific temperament
+        int tpID = _targetGO.tpWeaknessList[(int)_tpAttack];
+
+        //Get multiplier for that temperament
+        float tpMultiplier;
+        switch (tpID)
         {
-            case ACTION.ATTACK:
-                totalDmg = (int)(attackStat - targetGO.defStat);
+            case -1:
+                tpMultiplier = 2.0f;
                 break;
-            case ACTION.SKILL:
-                totalDmg = (int)(currentSkill.skillStrength - targetGO.defStat);
+            case 0:
+                tpMultiplier = 1.0f;
+                break;
+            case 1:
+                tpMultiplier = 0.5f;
+                break;
+            default:
+                tpMultiplier = 1.0f;
                 break;
         }
 
-        targetGO.CurrentHP -= totalDmg;
-        targetGO.UpdateHealthBar();
+        return tpMultiplier;
+    }
+
+    public void CalculateDamage(BaseEntity _targetGO, TEMPERAMENT _tpAttack = TEMPERAMENT.NONE)
+    {
+        float totalDmg = 0;
+
+        //Source of attack stat
+        switch (currentAction)
+        {
+            case ACTION.ATTACK:
+                totalDmg = attackStat;
+                break;
+            case ACTION.SKILL:
+                totalDmg = currentSkill.skillStrength;
+                break;
+        }
+
+        //Compare against temperament
+        TEMPERAMENT temperament = _tpAttack;
+
+        if (currentSkill)
+            temperament = currentSkill.skillType;
+
+        float tpMultiplier = CompareTemperament(_targetGO, temperament);
+        totalDmg *= tpMultiplier;
+
+        //Compare against defense
+        totalDmg -= _targetGO.defStat;
+
+        //Finalized damage
+        _targetGO.CurrentHP -= (int)totalDmg;
+
+        _targetGO.UpdateHealthBar();
     }
 
     public void UpdateHealthBar()
@@ -98,9 +154,9 @@ public class BaseEntity : MonoBehaviour
                 case ANIMATION.ATTACK:
                     animator.SetTrigger("Attack");
                     break;
-                //case ANIMATION.SKILL:
-                //    animator.SetTrigger("Skill");
-                //    break;
+                case ANIMATION.SKILL:
+                    animator.SetTrigger("Skill");
+                    break;
             }
 
             return true;
