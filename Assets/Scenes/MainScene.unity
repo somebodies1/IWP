@@ -388,6 +388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466d3b1a9a0aae64184fd576d6c8ab31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleManager: {fileID: 602957112}
   attackUIList:
   - {fileID: 1628299288}
   - {fileID: 1955259324}
@@ -397,6 +398,7 @@ MonoBehaviour:
   skillsUI: {fileID: 1955259324}
   emptyGOUIPrefab: {fileID: 5317233969699847803, guid: 5452c8087b345f848b0691d135231ec5, type: 3}
   skillButton: {fileID: 8272249540540689591, guid: 8013f4a0185a9fe499613079d33d4405, type: 3}
+  targetSelectionUI: {fileID: 578447677}
 --- !u!1 &240586767
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,7 +728,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 311036789}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 602957111}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &311036789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1791,6 +1805,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 602957112}
+        m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
+        m_MethodName: OnButtonPlayerAction
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 221213628}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SwitchAttackUI
@@ -1798,18 +1824,6 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 1955259324}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 602957112}
-        m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
-        m_MethodName: SwitchToCurrentPlayerCharSkills
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2655,7 +2669,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 602957112}
         m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
-        m_MethodName: PlayerAttack
+        m_MethodName: OnButtonPlayerTarget
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1427023688}
@@ -3181,6 +3195,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 602957112}
+        m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
+        m_MethodName: OnButtonPlayerAction
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 221213628}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SwitchAttackUI
@@ -3547,7 +3573,9 @@ MonoBehaviour:
   CurrentMP: 100
   attackStat: 10
   defStat: 5
+  currentAction: 0
   skillList: []
+  currentSkill: {fileID: 0}
   entityType: 1
   HealthBar: {fileID: 1116985663}
   animator: {fileID: 3166231814951127424}
@@ -3789,7 +3817,9 @@ MonoBehaviour:
   CurrentMP: 100
   attackStat: 10
   defStat: 5
+  currentAction: 0
   skillList: []
+  currentSkill: {fileID: 0}
   entityType: 1
   HealthBar: {fileID: 1601982338}
   animator: {fileID: 3166231814951127424}
@@ -4781,7 +4811,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 602957112}
         m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
-        m_MethodName: PlayerAttack
+        m_MethodName: OnButtonPlayerTarget
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1532448175}

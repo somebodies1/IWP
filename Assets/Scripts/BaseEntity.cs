@@ -16,7 +16,15 @@ public class BaseEntity : MonoBehaviour
     {
         IDLE,
         ATTACK,
+        SKILL,
         ANIMATION_NUM
+    }
+
+    public enum ACTION
+    {
+        ATTACK,
+        SKILL,
+        ACTION_NUM
     }
 
     //Name
@@ -34,8 +42,12 @@ public class BaseEntity : MonoBehaviour
     public float attackStat = 10.0f;
     public float defStat = 5.0f;
 
+    //Action
+    public ACTION currentAction;
+
     //Skills
     public List<Skill> skillList;
+    public Skill currentSkill;
 
     //Type of entity
     public ENTITY_TYPE entityType;
@@ -55,6 +67,15 @@ public class BaseEntity : MonoBehaviour
     public void CalculateDamage(BaseEntity targetGO)
     {
         int totalDmg = (int)(attackStat - targetGO.defStat);
+        switch (currentAction)
+        {
+            case ACTION.ATTACK:
+                totalDmg = (int)(attackStat - targetGO.defStat);
+                break;
+            case ACTION.SKILL:
+                totalDmg = (int)(currentSkill.skillStrength - targetGO.defStat);
+                break;
+        }
 
         targetGO.CurrentHP -= totalDmg;
         targetGO.UpdateHealthBar();
@@ -77,11 +98,27 @@ public class BaseEntity : MonoBehaviour
                 case ANIMATION.ATTACK:
                     animator.SetTrigger("Attack");
                     break;
+                //case ANIMATION.SKILL:
+                //    animator.SetTrigger("Skill");
+                //    break;
             }
 
             return true;
         }
 
         return false;
+    }
+
+    public BaseEntity.ANIMATION CurrentActionToAnimation(ACTION _action)
+    {
+        switch(_action)
+        {
+            case ACTION.ATTACK:
+                return ANIMATION.ATTACK;
+            case ACTION.SKILL:
+                return ANIMATION.SKILL;
+        }
+
+        return ANIMATION.IDLE;
     }
 }

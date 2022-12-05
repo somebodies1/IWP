@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public BattleManager battleManager;
+
     public List<GameObject> attackUIList;
     public List<GameObject> playerSkillsList;
 
     public GameObject overallActionUI;
     public GameObject skillsUI;
+    public GameObject targetSelectionUI;
 
+    //Prefabs
     public GameObject emptyGOUIPrefab;
     public GameObject skillButton;
+
+    
 
     public void ActivateActionUI()
     {
@@ -91,5 +98,8 @@ public class UIManager : MonoBehaviour
 
         SkillButton.AddComponent<Skill>();
         SkillButton.GetComponent<Skill>().OverwriteSkill(_skill);
+
+        SkillButton.GetComponent<Button>().onClick.AddListener(delegate { battleManager.OnButtonPlayerSkill(SkillButton.GetComponent<Skill>()); });
+        SkillButton.GetComponent<Button>().onClick.AddListener(delegate { SwitchAttackUI(targetSelectionUI); });
     }
 }

@@ -94,14 +94,35 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void PlayerAttack(GameObject _targetGO)
+    public void OnButtonPlayerAction(int _actionNum)
+    {
+        currentCharacterTurn.GetComponent<BaseEntity>().currentAction = (BaseEntity.ACTION)_actionNum;
+    }
+
+    public void OnButtonPlayerSkill(Skill _skill)
+    {
+        Debug.Log("SKILL BUTTON TEST");
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+        currentCharacterGO.currentSkill = _skill;
+    }
+
+    public void OnButtonPlayerTarget(GameObject _targetGO)
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
 
-        if (currentCharacterGO.BaseEntityAnimation(BaseEntity.ANIMATION.ATTACK))
+        BaseEntity.ANIMATION currentCharacterAnimation = currentCharacterGO.CurrentActionToAnimation(currentCharacterGO.currentAction);
+
+        PlayerTarget(_targetGO.GetComponent<BaseEntity>(), currentCharacterAnimation);
+    }
+
+    void PlayerTarget(BaseEntity _targetGO, BaseEntity.ANIMATION _animation)
+    {
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+
+        if (currentCharacterGO.BaseEntityAnimation(_animation))
         {
             uiManager.DeactivateActionUI();
-            StartCoroutine(WaitForPlayerAnimation(_targetGO));
+            StartCoroutine(WaitForPlayerAnimation(_targetGO.gameObject));
         }
         else
         {
@@ -113,6 +134,46 @@ public class BattleManager : MonoBehaviour
 
         uiManager.SwitchAttackUIByName("ActionUI");
     }
+
+    //public void PlayerAttack(GameObject _targetGO)
+    //{
+    //    BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+
+    //    if (currentCharacterGO.BaseEntityAnimation(BaseEntity.ANIMATION.ATTACK))
+    //    {
+    //        uiManager.DeactivateActionUI();
+    //        StartCoroutine(WaitForPlayerAnimation(_targetGO));
+    //    }
+    //    else
+    //    {
+    //        BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
+    //        currentCharacterGO.CalculateDamage(targetGO);
+
+    //        NextPlayerTurn();
+    //    }
+
+    //    uiManager.SwitchAttackUIByName("ActionUI");
+    //}
+
+    //public void PlayerSkill(Skill _skill)
+    //{
+    //    BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+
+    //    if (currentCharacterGO.BaseEntityAnimation(BaseEntity.ANIMATION.ATTACK))
+    //    {
+    //        uiManager.DeactivateActionUI();
+    //        StartCoroutine(WaitForPlayerAnimation(_targetGO));
+    //    }
+    //    else
+    //    {
+    //        BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
+    //        currentCharacterGO.CalculateDamage(targetGO);
+
+    //        NextPlayerTurn();
+    //    }
+
+    //    uiManager.SwitchAttackUIByName("ActionUI");
+    //}
 
     public void EnemyAttack(GameObject _targetGO)
     {
