@@ -118,7 +118,7 @@ public class BaseEntity : MonoBehaviour
                 totalDmg = currentSkill.skillStrength;
                 break;
         }
-
+        Debug.Log("atkStat" + totalDmg);
         //Compare against temperament
         TEMPERAMENT temperament = _tpAttack;
 
@@ -127,10 +127,10 @@ public class BaseEntity : MonoBehaviour
 
         float tpMultiplier = CompareTemperament(_targetGO, temperament);
         totalDmg *= tpMultiplier;
-
+        Debug.Log("afterTPDmg" + totalDmg);
         //Compare against defense
         totalDmg -= _targetGO.defStat;
-
+        Debug.Log("finalDmg: " + totalDmg);
         //Finalized damage
         _targetGO.CurrentHP -= (int)totalDmg;
 
