@@ -139,8 +139,13 @@ public class BattleManager : MonoBehaviour
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
         BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
 
+        Vector3 oldCCPos = currentCharacterTurn.transform.position;
+        currentCharacterTurn.transform.position = new Vector3(_targetGO.transform.position.x - 1, oldCCPos.y, _targetGO.transform.position.z);
+
         //Wait for animation to end
         yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
+
+        currentCharacterTurn.transform.position = oldCCPos;
 
         currentCharacterGO.CalculateDamage(targetGO);
 
@@ -154,8 +159,13 @@ public class BattleManager : MonoBehaviour
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
         BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
 
+        Vector3 oldCCPos = currentCharacterTurn.transform.position;
+        currentCharacterTurn.transform.position = new Vector3(_targetGO.transform.position.x + 1, oldCCPos.y, _targetGO.transform.position.z);
+
         //Wait for animation to end
         yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
+
+        currentCharacterTurn.transform.position = oldCCPos;
 
         currentCharacterGO.CalculateDamage(targetGO);
 
