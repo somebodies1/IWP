@@ -72,7 +72,9 @@ public class BaseEntity : MonoBehaviour
     public ENTITY_TYPE entityType;
     public List<int> tpWeaknessList; //-1 Weak  0 Neutral  1 Strong
 
-    public GameObject HealthBar;
+    //Stats UI
+    //public GameObject HealthBar;
+    public GameObject entityStatsUI;
 
     public Animator animator;
     public AnimationClip idleClip;
@@ -83,7 +85,6 @@ public class BaseEntity : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
-        //Debug.Log("rotation: " + this.gameObject.transform.rotation.eulerAngles);
     }
 
     public bool CheckIfCurrentActionGuard()
@@ -101,6 +102,7 @@ public class BaseEntity : MonoBehaviour
         if (!_targetGO.CheckIfCurrentActionGuard())
         {
             _targetGO.fullGuardAmt -= 1;
+            Debug.Log("Guard break!");
         }
     }
 
@@ -187,13 +189,13 @@ public class BaseEntity : MonoBehaviour
         //Finalized damage
         _targetGO.CurrentHP -= (int)totalDmg;
 
-        _targetGO.UpdateHealthBar();
+        _targetGO.UpdateStats();
     }
 
-    public void UpdateHealthBar()
+    public void UpdateStats()
     {
         float currentToMaxHealthRatio = (float)CurrentHP / (float)MaxHP;
-        HealthBar.transform.localScale = new Vector3(currentToMaxHealthRatio, 1, 1);
+        entityStatsUI.GetComponent<EntityStatsUI>().UpdateChangingValues(currentToMaxHealthRatio, fullGuardAmt);
     }
 
     //Triggers animations to start

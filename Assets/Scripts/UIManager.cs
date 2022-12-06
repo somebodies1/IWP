@@ -10,6 +10,11 @@ public class UIManager : MonoBehaviour
     public List<GameObject> attackUIList;
     public List<GameObject> playerSkillsList;
 
+    //Stats UI
+    public GameObject playerStatsUI;
+    public GameObject enemyStatsUI;
+
+    //Action UI
     public GameObject overallActionUI;
     public GameObject skillsUI;
     public GameObject targetSelectionUI;
@@ -19,6 +24,7 @@ public class UIManager : MonoBehaviour
     //Prefabs
     public GameObject emptyGOUIPrefab;
     public GameObject skillButton;
+    public GameObject entityStatsUI;
 
     public void ActivateActionUI()
     {
@@ -92,7 +98,6 @@ public class UIManager : MonoBehaviour
 
     public void SpawnSkillButton(Transform _parent, Vector3 _buttonPos, Skill _skill)
     {
-        //var skillButton = Instantiate(_skill, new Vector3(0, 0, 0), Quaternion.identity, _parent);
         GameObject SkillButton = Instantiate(skillButton, new Vector3(0, 0, 0), Quaternion.identity, _parent);
         SkillButton.transform.localPosition = _buttonPos;
 
@@ -106,5 +111,24 @@ public class UIManager : MonoBehaviour
     public void OnButtonSkillSwitch()
     {
         SwitchCurrentPlayerSkillsUIByName(battleManager.currentCharacterTurn.GetComponent<BaseEntity>().entityName);
+    }
+
+    public void SpawnAllEntityStatsUI(List<GameObject> _charList, GameObject _parent)
+    {
+        float uiYPos = 75f;
+        for (int i = 0; i < _charList.Count; ++i)
+        {
+            SpawnEntityStatsUI(_parent, _charList[i].GetComponent<BaseEntity>(), new Vector3(0, uiYPos, 0));
+            uiYPos -= 50f;
+        }
+    }
+
+    public void SpawnEntityStatsUI(GameObject _parent, BaseEntity _char, Vector3 _pos)
+    {
+        GameObject EntityStats = Instantiate(entityStatsUI, new Vector3(0, 0, 0), Quaternion.identity, _parent.transform);
+        EntityStats.transform.localPosition = _pos;
+
+        _char.entityStatsUI = EntityStats;
+        EntityStats.GetComponent<EntityStatsUI>().UpdateAllEntityStatsUIValues(_char.entityName, 1, _char.fullGuardAmt);
     }
 }

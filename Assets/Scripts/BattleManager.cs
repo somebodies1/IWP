@@ -20,6 +20,8 @@ public class BattleManager : MonoBehaviour
 
         //Generate UI stuff
         uiManager.SpawnAllSkillButtons(playerCharList);
+        uiManager.SpawnAllEntityStatsUI(playerCharList, uiManager.playerStatsUI);
+        uiManager.SpawnAllEntityStatsUI(enemiesList, uiManager.enemyStatsUI);
 
         //Player's turn first
         SwitchToPlayerTurn();
@@ -133,6 +135,7 @@ public class BattleManager : MonoBehaviour
         else
         {
             currentCharacterGO.fullGuardAmt -= 1;
+            currentCharacterGO.UpdateStats();
         }
 
         BaseEntity.ANIMATION currentCharacterAnimation = currentCharacterGO.CurrentActionToAnimation(currentCharacterGO.currentAction);

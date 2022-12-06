@@ -1460,7 +1460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e4e72be98d25f418e61d600c2447dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityName: 
+  entityName: Strong1
   MaxHP: 100
   CurrentHP: 100
   MaxMP: 100
@@ -1474,6 +1474,7 @@ MonoBehaviour:
   entityType: 1
   tpWeaknessList: 00000000010000000100000001000000010000000100000001000000
   HealthBar: {fileID: 0}
+  entityStatsUI: {fileID: 0}
   animator: {fileID: 1013640977822866347}
   idleClip: {fileID: 7400000, guid: 083c3917822dd164fafb1a91883fbff8, type: 2}
   attackClip: {fileID: 7400000, guid: 33a3f6352f52f9d45bdf449c4ecf1953, type: 2}
