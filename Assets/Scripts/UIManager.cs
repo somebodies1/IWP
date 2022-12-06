@@ -177,6 +177,6 @@ public class UIManager : MonoBehaviour
         GameObject EntityStats = _statsGO;
 
         _char.entityStatsUI = EntityStats;
-        EntityStats.GetComponent<EntityStatsUI>().UpdateAllEntityStatsUIValues(_char.entityName, 1, _char.fullGuardAmt);
+        EntityStats.GetComponent<EntityStatsUI>().UpdateAllEntityStatsUIValues(_char.entityName, 1, 0, _char.fullGuardAmt);
     }
 }

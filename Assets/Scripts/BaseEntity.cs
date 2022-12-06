@@ -54,6 +54,10 @@ public class BaseEntity : MonoBehaviour
     public int MaxMP = 100;
     public int CurrentMP = 100;
 
+    //Limit Break
+    public int MaxLB = 100;
+    public int CurrentLB = 0;
+
     //Combat Stats
     public float attackStat = 10.0f;
     public float defStat = 5.0f;
@@ -93,6 +97,16 @@ public class BaseEntity : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    void LimitBreakUpdater(BaseEntity _targetGO, float _totalDmg)
+    {
+        //Do some calcs here
+
+        CurrentLB += 100;
+
+        if (CurrentLB > MaxLB)
+            CurrentLB = MaxLB;
     }
 
     //Full guard amt will only decrease when not guarding or full guarding
@@ -188,13 +202,19 @@ public class BaseEntity : MonoBehaviour
         //Finalized damage
         _targetGO.CurrentHP -= (int)totalDmg;
 
+        //Update limit break
+        LimitBreakUpdater(_targetGO, totalDmg);
+
+        //Update both attacker and target stats
+        UpdateStats();
         _targetGO.UpdateStats();
     }
 
     public void UpdateStats()
     {
         float currentToMaxHealthRatio = (float)CurrentHP / (float)MaxHP;
-        entityStatsUI.GetComponent<EntityStatsUI>().UpdateChangingValues(currentToMaxHealthRatio, fullGuardAmt);
+        float currentToMaxLBRatio = (float)CurrentLB / (float)MaxLB;
+        entityStatsUI.GetComponent<EntityStatsUI>().UpdateChangingValues(currentToMaxHealthRatio, currentToMaxLBRatio, fullGuardAmt);
     }
 
     //Triggers animations to start

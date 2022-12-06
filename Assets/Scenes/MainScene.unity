@@ -240,6 +240,22 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 266912723}
     m_Modifications:
+    - target: {fileID: 4283293929415863732, guid: 66574609c20cf3140a8bebab8b2f9ebf, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283293929415863732, guid: 66574609c20cf3140a8bebab8b2f9ebf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283293929493352446, guid: 66574609c20cf3140a8bebab8b2f9ebf, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283293929493352446, guid: 66574609c20cf3140a8bebab8b2f9ebf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4283293930838251896, guid: 66574609c20cf3140a8bebab8b2f9ebf, type: 3}
       propertyPath: m_Name
       value: PlayerStats1
