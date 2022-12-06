@@ -11,7 +11,6 @@ public class EnemyFSM : MonoBehaviour
         TURN_STATE_NUM
     }
 
-    public BattleManager battleManager;
     public BaseEntity enemy;
 
     public TURN_STATE currentState;
@@ -20,12 +19,24 @@ public class EnemyFSM : MonoBehaviour
 
     private void Start()
     {
-        battleManager = GameObject.FindObjectOfType<BattleManager>();
         enemy = this.GetComponent<BaseEntity>();
     }
 
     public void SetCurrentState(TURN_STATE newState)
     {
         currentState = newState;
+    }
+
+    //Decide which player char to target
+    public void EnemyAITargeting(List<GameObject> _playerCharList)
+    {
+        //for (int i = 0; i < _playerCharList.Count; ++i)
+        //{
+        //    Debug.Log("PlayerCharlist: " + _playerCharList[i]);
+        //}
+
+        //Random targeting
+        int playerListID = Random.Range(0, _playerCharList.Count);
+        targetGO = _playerCharList[playerListID];
     }
 }

@@ -14,13 +14,14 @@ public class BattleManager : MonoBehaviour
     //Turns always start with player
     private void Start()
     {
+        //Add GOs to lists
         playerCharList.AddRange(GameObject.FindGameObjectsWithTag("PlayerChar"));
+        enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
 
         //Generate UI stuff
         uiManager.SpawnAllSkillButtons(playerCharList);
 
-        enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
-
+        //Player's turn first
         SwitchToPlayerTurn();
     }
 
@@ -71,7 +72,11 @@ public class BattleManager : MonoBehaviour
     {
         CurrentTurnCheck();
 
-        EnemyAttack(currentCharacterTurn.GetComponent<EnemyFSM>().targetGO);
+        //Choose which player char to target
+        EnemyFSM currentCharacterTurnEnemyFSM = currentCharacterTurn.GetComponent<EnemyFSM>();
+        currentCharacterTurnEnemyFSM.EnemyAITargeting(playerCharList);
+
+        EnemyAttack(currentCharacterTurnEnemyFSM.targetGO);
     }
 
     private void NextEnemyTurnConditions()
@@ -80,13 +85,14 @@ public class BattleManager : MonoBehaviour
 
         int currentEnemyIndex = enemiesList.IndexOf(currentCharacterTurn);
 
-        //Switch to next enemy's turn
         if (currentEnemyIndex >= enemiesList.Count - 1)
         {
+            //Switch to player's turn
             SwitchToPlayerTurn();
         }
         else
         {
+            //Switch to next enemy's turn
             enemiesList[currentEnemyIndex + 1].GetComponent<EnemyFSM>().SetCurrentState(EnemyFSM.TURN_STATE.WAITING);
             currentCharacterTurn = enemiesList[currentEnemyIndex + 1];
 
