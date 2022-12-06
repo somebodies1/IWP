@@ -19,6 +19,7 @@ public class BaseEntity : MonoBehaviour
         SKILL,
         GUARD,
         END_GUARD,
+        LIMIT_BREAK,
         ANIMATION_NUM
     }
 
@@ -28,6 +29,7 @@ public class BaseEntity : MonoBehaviour
         SKILL,
         GUARD,
         FULL_GUARD,
+        LIMIT_BREAK,
         ACTION_NUM
     }
 
@@ -57,6 +59,7 @@ public class BaseEntity : MonoBehaviour
     //Limit Break
     public int MaxLB = 100;
     public int CurrentLB = 0;
+    public List<Skill> lbList; //Max 5
 
     //Combat Stats
     public float attackStat = 10.0f;
@@ -88,6 +91,14 @@ public class BaseEntity : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+    }
+
+    public bool CheckIfLimitBreakFull()
+    {
+        if (CurrentLB >= MaxLB)
+            return true;
+        else
+            return false;
     }
 
     public bool CheckIfCurrentActionGuard()

@@ -61,9 +61,22 @@ public class BattleManager : MonoBehaviour
         playerCharList[0].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
         currentCharacterTurn = playerCharList[0];
 
-        if (currentCharacterTurn.GetComponent<BaseEntity>().CheckIfCurrentActionGuard())
+        BaseEntity currentCharacterBaseEntity = currentCharacterTurn.GetComponent<BaseEntity>();
+
+        //Ends guarding animation
+        if (currentCharacterBaseEntity.CheckIfCurrentActionGuard())
         {
-            currentCharacterTurn.GetComponent<BaseEntity>().BaseEntityAnimation(BaseEntity.ANIMATION.END_GUARD);
+            currentCharacterBaseEntity.BaseEntityAnimation(BaseEntity.ANIMATION.END_GUARD);
+        }
+
+        //Enables limit break button
+        if (currentCharacterBaseEntity.CheckIfLimitBreakFull())
+        {
+            uiManager.limitBreakButton.SetActive(true);
+        }
+        else
+        {
+            uiManager.limitBreakButton.SetActive(false);
         }
     }
 
@@ -89,9 +102,22 @@ public class BattleManager : MonoBehaviour
             playerCharList[currentPlayerCharIndex + 1].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
             currentCharacterTurn = playerCharList[currentPlayerCharIndex + 1];
 
-            if (currentCharacterTurn.GetComponent<BaseEntity>().CheckIfCurrentActionGuard())
+            BaseEntity currentCharacterBaseEntity = currentCharacterTurn.GetComponent<BaseEntity>();
+
+            //Ends guarding animation
+            if (currentCharacterBaseEntity.CheckIfCurrentActionGuard())
             {
-                currentCharacterTurn.GetComponent<BaseEntity>().BaseEntityAnimation(BaseEntity.ANIMATION.END_GUARD);
+                currentCharacterBaseEntity.BaseEntityAnimation(BaseEntity.ANIMATION.END_GUARD);
+            }
+
+            //Enables limit break button
+            if (currentCharacterBaseEntity.CheckIfLimitBreakFull())
+            {
+                uiManager.limitBreakButton.SetActive(true);
+            }
+            else
+            {
+                uiManager.limitBreakButton.SetActive(false);
             }
         }
     }
@@ -150,21 +176,30 @@ public class BattleManager : MonoBehaviour
         currentCharacterGO.currentSkill = _skill;
     }
 
+    public void OnButtonPlayerLimitBreak(Skill _skill)
+    {
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+        currentCharacterGO.currentSkill = _skill;
+    }
+
     public void OnButtonPlayerGuard()
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
 
-        if (currentCharacterGO.fullGuardAmt <= 0)
+        if (currentCharacterGO.currentAction == BaseEntity.ACTION.FULL_GUARD)
         {
-            currentCharacterTurn.GetComponent<BaseEntity>().currentAction = BaseEntity.ACTION.ATTACK;
-            return;
+            if (currentCharacterGO.fullGuardAmt <= 0)
+            {
+                currentCharacterTurn.GetComponent<BaseEntity>().currentAction = BaseEntity.ACTION.ATTACK;
+                return;
+            }
+            else
+            {
+                currentCharacterGO.fullGuardAmt -= 1;
+                currentCharacterGO.UpdateStats();
+            }
         }
-        else
-        {
-            currentCharacterGO.fullGuardAmt -= 1;
-            currentCharacterGO.UpdateStats();
-        }
-
+        
         BaseEntity.ANIMATION currentCharacterAnimation = currentCharacterGO.CurrentActionToAnimation(currentCharacterGO.currentAction);
 
         PlayerGuard(currentCharacterAnimation);

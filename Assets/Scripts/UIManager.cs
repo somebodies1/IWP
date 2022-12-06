@@ -28,6 +28,9 @@ public class UIManager : MonoBehaviour
 
     public GameObject switchSkillsButton;
 
+    public GameObject limitBreakButton;
+    public List<GameObject> limitBreakButtonList;
+
     //Prefabs
     public GameObject emptyGOUIPrefab;
     public GameObject skillButton;
@@ -178,5 +181,15 @@ public class UIManager : MonoBehaviour
 
         _char.entityStatsUI = EntityStats;
         EntityStats.GetComponent<EntityStatsUI>().UpdateAllEntityStatsUIValues(_char.entityName, 1, 0, _char.fullGuardAmt);
+    }
+
+    public void SetAllLimitBreakButtons()
+    {
+        //do this
+    }
+
+    public void SetLimitBreakButton()
+    {
+        //do this
     }
 }
