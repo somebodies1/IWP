@@ -1834,6 +1834,7 @@ MonoBehaviour:
   currentAction: 0
   skillList: []
   currentSkill: {fileID: 0}
+  fullGuardAmt: 1
   entityType: 1
   tpWeaknessList: 00000000ffffffffffffffffffffffffffffffffffffffffffffffff
   HealthBar: {fileID: 0}
@@ -1841,6 +1842,7 @@ MonoBehaviour:
   idleClip: {fileID: 7400000, guid: 083c3917822dd164fafb1a91883fbff8, type: 2}
   attackClip: {fileID: 7400000, guid: 33a3f6352f52f9d45bdf449c4ecf1953, type: 2}
   skillClip: {fileID: 7400000, guid: 3e1b2198053972d4e9db7dfa32fbbad2, type: 2}
+  guardClip: {fileID: 7400000, guid: af3f9f7d26f2d5d47a394978df788c24, type: 2}
 --- !u!114 &8057707200871968750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1853,7 +1855,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554dfdfa9169a3c4091e92a3ac2f492a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleManager: {fileID: 0}
   enemy: {fileID: 0}
   currentState: 0
   targetGO: {fileID: 0}

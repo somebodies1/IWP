@@ -31,6 +31,11 @@ public class BattleManager : MonoBehaviour
         uiManager.ActivateActionUI();
         playerCharList[0].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
         currentCharacterTurn = playerCharList[0];
+
+        if (currentCharacterTurn.GetComponent<BaseEntity>().CheckIfCurrentActionGuard())
+        {
+            currentCharacterTurn.GetComponent<BaseEntity>().BaseEntityAnimation(BaseEntity.ANIMATION.END_GUARD);
+        }
     }
 
     //When switching from player char to player char
@@ -54,6 +59,11 @@ public class BattleManager : MonoBehaviour
             //Switch to next player's character's turn
             playerCharList[currentPlayerCharIndex + 1].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
             currentCharacterTurn = playerCharList[currentPlayerCharIndex + 1];
+
+            if (currentCharacterTurn.GetComponent<BaseEntity>().CheckIfCurrentActionGuard())
+            {
+                currentCharacterTurn.GetComponent<BaseEntity>().BaseEntityAnimation(BaseEntity.ANIMATION.END_GUARD);
+            }
         }
     }
 
@@ -107,9 +117,44 @@ public class BattleManager : MonoBehaviour
 
     public void OnButtonPlayerSkill(Skill _skill)
     {
-        Debug.Log("SKILL BUTTON TEST");
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
         currentCharacterGO.currentSkill = _skill;
+    }
+
+    public void OnButtonPlayerGuard()
+    {
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+
+        if (currentCharacterGO.fullGuardAmt <= 0)
+        {
+            currentCharacterTurn.GetComponent<BaseEntity>().currentAction = BaseEntity.ACTION.ATTACK;
+            return;
+        }
+        else
+        {
+            currentCharacterGO.fullGuardAmt -= 1;
+        }
+
+        BaseEntity.ANIMATION currentCharacterAnimation = currentCharacterGO.CurrentActionToAnimation(currentCharacterGO.currentAction);
+
+        PlayerGuard(currentCharacterAnimation);
+    }
+
+    void PlayerGuard(BaseEntity.ANIMATION _animation)
+    {
+        BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+
+        if (currentCharacterGO.BaseEntityAnimation(_animation))
+        {
+            uiManager.DeactivateActionUI();
+            StartCoroutine(WaitForPlayerAnimation(currentCharacterGO.gameObject, _animation));
+        }
+        else
+        {
+            NextPlayerTurn();
+        }
+
+        uiManager.SwitchAttackUIByName("ActionUI");
     }
 
     public void OnButtonPlayerTarget(GameObject _targetGO)
@@ -180,6 +225,10 @@ public class BattleManager : MonoBehaviour
                 break;
             case BaseEntity.ANIMATION.SKILL:
                 yield return new WaitForSeconds(currentCharacterGO.skillClip.length);
+                break;
+            case BaseEntity.ANIMATION.GUARD:
+                //yield return new WaitForSeconds(currentCharacterGO.guardClip.length);
+                Debug.Log("Guarding");
                 break;
         }
 
