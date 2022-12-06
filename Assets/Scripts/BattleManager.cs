@@ -20,8 +20,10 @@ public class BattleManager : MonoBehaviour
 
         //Generate UI stuff
         uiManager.SpawnAllSkillButtons(playerCharList);
-        uiManager.SpawnAllEntityStatsUI(playerCharList, uiManager.playerStatsUI);
-        uiManager.SpawnAllEntityStatsUI(enemiesList, uiManager.enemyStatsUI);
+
+        uiManager.SetAllEntityStatsUI(playerCharList, true);
+        uiManager.SetAllEntityStatsUI(enemiesList, false);
+
         uiManager.SetAllTargetButtons(enemiesList);
 
         //Player's turn first
@@ -40,9 +42,6 @@ public class BattleManager : MonoBehaviour
 
     private void DeletePlayer(GameObject _playerCharToDelete)
     {
-        //Delete related GOs
-        _playerCharToDelete.GetComponent<BaseEntity>().DeleteBaseEntityRelatedGOs();
-
         //Delete GO
         playerCharList.Remove(_playerCharToDelete);
         Destroy(_playerCharToDelete);
@@ -50,10 +49,6 @@ public class BattleManager : MonoBehaviour
 
     private void DeleteEnemy(GameObject _enemyToDelete)
     {
-        //Delete related GOs
-        _enemyToDelete.GetComponent<BaseEntity>().DeleteBaseEntityRelatedGOs();
-        //uiManager.targetSelectionUI
-
         //Delete GO
         enemiesList.Remove(_enemyToDelete);
         Destroy(_enemyToDelete);

@@ -13,7 +13,10 @@ public class UIManager : MonoBehaviour
 
     //Stats UI
     public GameObject playerStatsUI;
+    public List<GameObject> playerStatsUIList;
+
     public GameObject enemyStatsUI;
+    public List<GameObject> enemyStatsUIList;
 
     //Action UI
     public GameObject overallActionUI;
@@ -21,14 +24,13 @@ public class UIManager : MonoBehaviour
     public GameObject skillsUI;
 
     public GameObject targetSelectionUI;
-    public List<GameObject> targetButtons;
+    public List<GameObject> targetButtonsList;
 
     public GameObject switchSkillsButton;
 
     //Prefabs
     public GameObject emptyGOUIPrefab;
     public GameObject skillButton;
-    public GameObject entityStatsUI;
 
     public void ActivateActionUI()
     {
@@ -114,16 +116,16 @@ public class UIManager : MonoBehaviour
 
     public void SetAllTargetButtons(List<GameObject> _enemiesList)
     {
-        for (int i = 0; i < targetButtons.Count; ++i)
+        for (int i = 0; i < targetButtonsList.Count; ++i)
         {
-            ResetTargetButton(targetButtons[i]);
-            targetButtons[i].SetActive(false);
+            ResetTargetButton(targetButtonsList[i]);
+            targetButtonsList[i].SetActive(false);
         }
 
         for (int i = 0; i < _enemiesList.Count; ++i)
         {
-            targetButtons[i].SetActive(true);
-            SetTargetButton(targetButtons[i], _enemiesList[i]);
+            targetButtonsList[i].SetActive(true);
+            SetTargetButton(targetButtonsList[i], _enemiesList[i]);
         }
     }
 
@@ -149,20 +151,30 @@ public class UIManager : MonoBehaviour
         SwitchCurrentPlayerSkillsUIByName(battleManager.currentCharacterTurn.GetComponent<BaseEntity>().entityName);
     }
 
-    public void SpawnAllEntityStatsUI(List<GameObject> _charList, GameObject _parent)
+    public void SetAllEntityStatsUI(List<GameObject> _charList, bool _isPlayerChar)
     {
-        float uiYPos = 75f;
+        List<GameObject> statsUIList;
+
+        if (_isPlayerChar)
+            statsUIList = playerStatsUIList;
+        else
+            statsUIList = enemyStatsUIList;
+
+        for (int i = 0; i < statsUIList.Count; ++i)
+        {
+            statsUIList[i].SetActive(false);
+        }
+
         for (int i = 0; i < _charList.Count; ++i)
         {
-            SpawnEntityStatsUI(_parent.transform, _charList[i].GetComponent<BaseEntity>(), new Vector3(0, uiYPos, 0));
-            uiYPos -= 50f;
+            statsUIList[i].SetActive(true);
+            SetEntityStatsUI(statsUIList[i], _charList[i].GetComponent<BaseEntity>());
         }
     }
 
-    public void SpawnEntityStatsUI(Transform _parent, BaseEntity _char, Vector3 _pos)
+    public void SetEntityStatsUI(GameObject _statsGO, BaseEntity _char)
     {
-        GameObject EntityStats = Instantiate(entityStatsUI, new Vector3(0, 0, 0), Quaternion.identity, _parent);
-        EntityStats.transform.localPosition = _pos;
+        GameObject EntityStats = _statsGO;
 
         _char.entityStatsUI = EntityStats;
         EntityStats.GetComponent<EntityStatsUI>().UpdateAllEntityStatsUIValues(_char.entityName, 1, _char.fullGuardAmt);

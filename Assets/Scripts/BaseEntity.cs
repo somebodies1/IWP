@@ -86,11 +86,6 @@ public class BaseEntity : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void DeleteBaseEntityRelatedGOs()
-    {
-        Destroy(entityStatsUI);
-    }
-
     public bool CheckIfCurrentActionGuard()
     {
         if (currentAction == ACTION.GUARD ||

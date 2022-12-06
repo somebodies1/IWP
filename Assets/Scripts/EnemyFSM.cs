@@ -30,11 +30,6 @@ public class EnemyFSM : MonoBehaviour
     //Decide which player char to target
     public void EnemyAITargeting(List<GameObject> _playerCharList)
     {
-        //for (int i = 0; i < _playerCharList.Count; ++i)
-        //{
-        //    Debug.Log("PlayerCharlist: " + _playerCharList[i]);
-        //}
-
         //Random targeting
         int playerListID = Random.Range(0, _playerCharList.Count);
         targetGO = _playerCharList[playerListID];
