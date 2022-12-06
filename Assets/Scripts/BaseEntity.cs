@@ -73,7 +73,6 @@ public class BaseEntity : MonoBehaviour
     public List<int> tpWeaknessList; //-1 Weak  0 Neutral  1 Strong
 
     //Stats UI
-    //public GameObject HealthBar;
     public GameObject entityStatsUI;
 
     public Animator animator;
@@ -85,6 +84,11 @@ public class BaseEntity : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+    }
+
+    public void DeleteBaseEntityRelatedGOs()
+    {
+        Destroy(entityStatsUI);
     }
 
     public bool CheckIfCurrentActionGuard()

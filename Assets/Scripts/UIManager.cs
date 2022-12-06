@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,8 +17,11 @@ public class UIManager : MonoBehaviour
 
     //Action UI
     public GameObject overallActionUI;
+
     public GameObject skillsUI;
+
     public GameObject targetSelectionUI;
+    public List<GameObject> targetButtons;
 
     public GameObject switchSkillsButton;
 
@@ -108,6 +112,38 @@ public class UIManager : MonoBehaviour
         SkillButton.GetComponent<Button>().onClick.AddListener(delegate { SwitchAttackUI(targetSelectionUI); });
     }
 
+    public void SetAllTargetButtons(List<GameObject> _enemiesList)
+    {
+        for (int i = 0; i < targetButtons.Count; ++i)
+        {
+            ResetTargetButton(targetButtons[i]);
+            targetButtons[i].SetActive(false);
+        }
+
+        for (int i = 0; i < _enemiesList.Count; ++i)
+        {
+            targetButtons[i].SetActive(true);
+            SetTargetButton(targetButtons[i], _enemiesList[i]);
+        }
+    }
+
+    public void ResetTargetButton(GameObject _buttonGO)
+    {
+        GameObject TargetButton = _buttonGO;
+
+        TargetButton.GetComponentInChildren<TextMeshProUGUI>().text = " ";
+        TargetButton.GetComponent<Button>().onClick.RemoveAllListeners();
+    }
+
+    public void SetTargetButton(GameObject _buttonGO, GameObject _targetGO)
+    {
+        GameObject TargetButton = _buttonGO;
+        TargetButton.GetComponentInChildren<TextMeshProUGUI>().text = _targetGO.GetComponent<BaseEntity>().entityName;
+
+        //Change targets
+        TargetButton.GetComponent<Button>().onClick.AddListener(delegate { battleManager.OnButtonPlayerTarget(_targetGO); });
+    }
+
     public void OnButtonSkillSwitch()
     {
         SwitchCurrentPlayerSkillsUIByName(battleManager.currentCharacterTurn.GetComponent<BaseEntity>().entityName);
@@ -118,14 +154,14 @@ public class UIManager : MonoBehaviour
         float uiYPos = 75f;
         for (int i = 0; i < _charList.Count; ++i)
         {
-            SpawnEntityStatsUI(_parent, _charList[i].GetComponent<BaseEntity>(), new Vector3(0, uiYPos, 0));
+            SpawnEntityStatsUI(_parent.transform, _charList[i].GetComponent<BaseEntity>(), new Vector3(0, uiYPos, 0));
             uiYPos -= 50f;
         }
     }
 
-    public void SpawnEntityStatsUI(GameObject _parent, BaseEntity _char, Vector3 _pos)
+    public void SpawnEntityStatsUI(Transform _parent, BaseEntity _char, Vector3 _pos)
     {
-        GameObject EntityStats = Instantiate(entityStatsUI, new Vector3(0, 0, 0), Quaternion.identity, _parent.transform);
+        GameObject EntityStats = Instantiate(entityStatsUI, new Vector3(0, 0, 0), Quaternion.identity, _parent);
         EntityStats.transform.localPosition = _pos;
 
         _char.entityStatsUI = EntityStats;

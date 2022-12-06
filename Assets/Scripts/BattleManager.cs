@@ -22,9 +22,41 @@ public class BattleManager : MonoBehaviour
         uiManager.SpawnAllSkillButtons(playerCharList);
         uiManager.SpawnAllEntityStatsUI(playerCharList, uiManager.playerStatsUI);
         uiManager.SpawnAllEntityStatsUI(enemiesList, uiManager.enemyStatsUI);
+        uiManager.SetAllTargetButtons(enemiesList);
 
         //Player's turn first
         SwitchToPlayerTurn();
+    }
+
+    private void AddPlayer()
+    {
+
+    }
+
+    private void AddEnemy()
+    {
+
+    }
+
+    private void DeletePlayer(GameObject _playerCharToDelete)
+    {
+        //Delete related GOs
+        _playerCharToDelete.GetComponent<BaseEntity>().DeleteBaseEntityRelatedGOs();
+
+        //Delete GO
+        playerCharList.Remove(_playerCharToDelete);
+        Destroy(_playerCharToDelete);
+    }
+
+    private void DeleteEnemy(GameObject _enemyToDelete)
+    {
+        //Delete related GOs
+        _enemyToDelete.GetComponent<BaseEntity>().DeleteBaseEntityRelatedGOs();
+        //uiManager.targetSelectionUI
+
+        //Delete GO
+        enemiesList.Remove(_enemyToDelete);
+        Destroy(_enemyToDelete);
     }
 
     //Switch to player's turn
