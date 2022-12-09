@@ -250,6 +250,8 @@ public class BattleManager : MonoBehaviour
         if (currentCharacterGO.BaseEntityAnimation(_animation))
         {
             uiManager.DeactivateActionUI();
+            //if (_animation == BaseEntity.ANIMATION.LIMIT_BREAK)
+            //    StartCoroutine(currentCharacterGO.LimitBreakAnimation(camManager.mainCamera));
             StartCoroutine(WaitForPlayerAnimation(_targetGO.gameObject, _animation));
         }
         else
@@ -300,17 +302,19 @@ public class BattleManager : MonoBehaviour
                 yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
 
                 currentCharacterTurn.transform.position = oldCCPos;
-                camManager.SetMainCameraToOriginalState();
                 break;
             case BaseEntity.ANIMATION.SKILL:
                 yield return new WaitForSeconds(currentCharacterGO.skillClip.length);
                 break;
             case BaseEntity.ANIMATION.GUARD:
                 yield return new WaitForSeconds(0.5f);
-                Debug.Log("Guarding");
+                break;
+            case BaseEntity.ANIMATION.LIMIT_BREAK:
+                StartCoroutine(currentCharacterGO.LimitBreakAnimation(camManager.mainCamera));
+                yield return new WaitForSeconds(currentCharacterGO.GetLBAnimationTime() - 0.5f);
                 break;
         }
-
+        camManager.SetMainCameraToOriginalState();
         currentCharacterGO.CalculateDamage(targetGO);
 
         uiManager.ActivateActionUI();

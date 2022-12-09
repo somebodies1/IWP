@@ -17,7 +17,7 @@ public class CameraManager : MonoBehaviour
     public void SetMainCameraToOriginalState()
     {
         mainCamera.transform.position = originalPos;
-        mainCamera.transform.Rotate(originalRotation);
+        mainCamera.transform.eulerAngles = originalRotation;
     }
 
     public void CameraMovement(Vector3 _v3)

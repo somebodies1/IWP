@@ -88,6 +88,9 @@ public class BaseEntity : MonoBehaviour
     public AnimationClip skillClip;
     public AnimationClip guardClip;
 
+    public List<AnimationClip> lbClipList;
+    public List<GameObject> weaponsList;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -275,6 +278,8 @@ public class BaseEntity : MonoBehaviour
                 case ANIMATION.END_GUARD:
                     animator.SetTrigger("EndGuard");
                     break;
+                case ANIMATION.LIMIT_BREAK:
+                    return true;
             }
 
             return true;
@@ -296,8 +301,79 @@ public class BaseEntity : MonoBehaviour
                 return ANIMATION.GUARD;
             case ACTION.FULL_GUARD:
                 return ANIMATION.GUARD;
+            case ACTION.LIMIT_BREAK:
+                return ANIMATION.LIMIT_BREAK;
         }
 
         return ANIMATION.IDLE;
+    }
+
+    public void SetWeaponActiveByName(string _name)
+    {
+        GameObject weapon = SearchWeaponsListByName(_name);
+        weapon.SetActive(true);
+    }
+
+    public void SetWeaponInactiveByName(string _name)
+    {
+        GameObject weapon = SearchWeaponsListByName(_name);
+        weapon.SetActive(false);
+    }
+
+    public GameObject SearchWeaponsListByName(string _name)
+    {
+        for (int i = 0; i < weaponsList.Count; ++i)
+        {
+            if (weaponsList[i].name == _name)
+                return weaponsList[i];
+        }
+
+        return null;
+    }
+
+    public IEnumerator LimitBreakAnimation(Camera _camera)
+    {
+        animator.SetTrigger("LimitBreak");
+
+        //if (weaponsList[0])
+        //    weaponsList[0].SetActive(true);
+
+        for (int i = 0; i < lbClipList.Count; ++i)
+        {
+            if (i == 0)
+            {
+                _camera.transform.position = new Vector3(-3,1,-6);
+                _camera.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+
+            if (i == 1)
+            {
+                _camera.transform.position = new Vector3(-1.5f, 1, -5);
+                _camera.transform.eulerAngles = new Vector3(0, -90, 0);
+            }
+
+            if (i == 2)
+            {
+                _camera.transform.position = new Vector3(-5f, 1, -5);
+                _camera.transform.eulerAngles = new Vector3(0, -270, 0);
+            }
+
+            yield return new WaitForSeconds(lbClipList[i].length);
+        }
+
+        //if (weaponsList[0])
+        //    weaponsList[0].SetActive(false);
+    }
+
+    public float GetLBAnimationTime()
+    {
+        float animTime = 0.0f;
+
+        for (int i = 0; i < lbClipList.Count; ++i)
+        {
+            animTime += lbClipList[i].length;
+        }
+
+        return animTime;
     }
 }
