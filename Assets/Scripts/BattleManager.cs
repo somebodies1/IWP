@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     public UIManager uiManager;
+    public CameraManager camManager;
 
     public List<GameObject> playerCharList;
     public List<GameObject> enemiesList;
@@ -25,6 +26,10 @@ public class BattleManager : MonoBehaviour
         uiManager.SetAllEntityStatsUI(enemiesList, false);
 
         uiManager.SetAllTargetButtons(enemiesList);
+
+        //Test to kill enemies
+        //DeleteEnemy(enemiesList[1]);
+        //camManager.CameraMovement(new Vector3(1.5f, 1, -7));
 
         //Player's turn first
         SwitchToPlayerTurn();
@@ -52,6 +57,9 @@ public class BattleManager : MonoBehaviour
         //Delete GO
         enemiesList.Remove(_enemyToDelete);
         Destroy(_enemyToDelete);
+
+        uiManager.SetAllTargetButtons(enemiesList);
+        uiManager.SetAllEntityStatsUI(enemiesList, false);
     }
 
     //Switch to player's turn
@@ -186,17 +194,14 @@ public class BattleManager : MonoBehaviour
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
 
+        //Check if using full guard
         if (currentCharacterGO.currentAction == BaseEntity.ACTION.FULL_GUARD)
         {
-            if (currentCharacterGO.fullGuardAmt <= 0)
+            //Check if conditions are met
+            if (!currentCharacterGO.CheckIfEntityCanFullGuard())
             {
-                currentCharacterTurn.GetComponent<BaseEntity>().currentAction = BaseEntity.ACTION.ATTACK;
+                //Disallows full guard when conditions are not met
                 return;
-            }
-            else
-            {
-                currentCharacterGO.fullGuardAmt -= 1;
-                currentCharacterGO.UpdateStats();
             }
         }
         
@@ -226,6 +231,13 @@ public class BattleManager : MonoBehaviour
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
 
+        //Check if using limit break
+        if (currentCharacterGO.currentAction == BaseEntity.ACTION.LIMIT_BREAK)
+        {
+            //Use character's limit break meter
+            currentCharacterGO.UseLimitBreak();
+        }
+            
         BaseEntity.ANIMATION currentCharacterAnimation = currentCharacterGO.CurrentActionToAnimation(currentCharacterGO.currentAction);
 
         PlayerTarget(_targetGO.GetComponent<BaseEntity>(), currentCharacterAnimation);
@@ -283,16 +295,18 @@ public class BattleManager : MonoBehaviour
         {
             case BaseEntity.ANIMATION.ATTACK:
                 currentCharacterTurn.transform.position = new Vector3(_targetGO.transform.position.x - 1, oldCCPos.y, _targetGO.transform.position.z);
+                camManager.CameraCloseUp(new Vector3(_targetGO.transform.position.x - 1.5f, 1, _targetGO .transform.position.z - 2));
 
                 yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
 
                 currentCharacterTurn.transform.position = oldCCPos;
+                camManager.SetMainCameraToOriginalState();
                 break;
             case BaseEntity.ANIMATION.SKILL:
                 yield return new WaitForSeconds(currentCharacterGO.skillClip.length);
                 break;
             case BaseEntity.ANIMATION.GUARD:
-                //yield return new WaitForSeconds(currentCharacterGO.guardClip.length);
+                yield return new WaitForSeconds(0.5f);
                 Debug.Log("Guarding");
                 break;
         }
@@ -312,11 +326,13 @@ public class BattleManager : MonoBehaviour
 
         Vector3 oldCCPos = currentCharacterTurn.transform.position;
         currentCharacterTurn.transform.position = new Vector3(_targetGO.transform.position.x + 1, oldCCPos.y, _targetGO.transform.position.z);
+        camManager.CameraCloseUp(new Vector3(_targetGO.transform.position.x + 1.5f, 1, _targetGO.transform.position.z - 2));
 
         //Wait for animation to end
         yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
 
         currentCharacterTurn.transform.position = oldCCPos;
+        camManager.SetMainCameraToOriginalState();
 
         currentCharacterGO.CalculateDamage(targetGO);
 

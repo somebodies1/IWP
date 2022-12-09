@@ -110,14 +110,37 @@ public class BaseEntity : MonoBehaviour
             return false;
     }
 
+    public void UseLimitBreak()
+    {
+        CurrentLB = 0;
+    }
+
     void LimitBreakUpdater(BaseEntity _targetGO, float _totalDmg)
     {
+        if (currentAction == ACTION.LIMIT_BREAK)
+            return;
+
         //Do some calcs here
 
         CurrentLB += 100;
 
         if (CurrentLB > MaxLB)
             CurrentLB = MaxLB;
+    }
+
+    public bool CheckIfEntityCanFullGuard()
+    {
+        if (fullGuardAmt <= 0)
+        {
+            currentAction = BaseEntity.ACTION.ATTACK;
+            return false;
+        }
+        else
+        {
+            fullGuardAmt -= 1;
+            UpdateStats();
+            return true;
+        }
     }
 
     //Full guard amt will only decrease when not guarding or full guarding
@@ -187,6 +210,9 @@ public class BaseEntity : MonoBehaviour
                 totalDmg = attackStat;
                 break;
             case ACTION.SKILL:
+                totalDmg = currentSkill.skillStrength;
+                break;
+            case ACTION.LIMIT_BREAK:
                 totalDmg = currentSkill.skillStrength;
                 break;
         }
