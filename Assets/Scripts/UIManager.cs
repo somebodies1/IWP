@@ -190,7 +190,13 @@ public class UIManager : MonoBehaviour
 
     public void SwitchCurrentPlayersLimitBreakUI()
     {
-        List<Skill> currentPlayerLBList = battleManager.currentCharacterTurn.GetComponent<BaseEntity>().lbList;
+        List<Skill> currentPlayerLBList = new List<Skill>();
+        List<LimitBreak> LBList = battleManager.currentCharacterTurn.GetComponent<BaseEntity>().lbList;
+
+        for (int i = 0; i < LBList.Count; ++i)
+        {
+            currentPlayerLBList.Add(LBList[i].lbSkill);
+        }
 
         //Disable limit break buttons
         for (int i = 0; i < limitBreakButtonList.Count; ++i)
@@ -202,17 +208,17 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < currentPlayerLBList.Count; ++i)
         {
             limitBreakButtonList[i].SetActive(true);
-            SetLimitBreakButton(limitBreakButtonList[i], currentPlayerLBList[i]);
+            SetLimitBreakButton(limitBreakButtonList[i], currentPlayerLBList[i], i);
         }
     }
 
-    public void SetLimitBreakButton(GameObject _button, Skill _lb)
+    public void SetLimitBreakButton(GameObject _button, Skill _lb, int _lbNum)
     {
         Button lbButton = _button.GetComponent<Button>();
 
         lbButton.onClick.RemoveAllListeners();
 
-        lbButton.onClick.AddListener(delegate { battleManager.OnButtonPlayerLimitBreak(_lb); });
+        lbButton.onClick.AddListener(delegate { battleManager.OnButtonPlayerLimitBreak(_lb, _lbNum); });
         lbButton.onClick.AddListener(delegate { SwitchAttackUI(targetSelectionUI); });
     }
 }

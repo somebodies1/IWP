@@ -184,10 +184,11 @@ public class BattleManager : MonoBehaviour
         currentCharacterGO.currentSkill = _skill;
     }
 
-    public void OnButtonPlayerLimitBreak(Skill _skill)
+    public void OnButtonPlayerLimitBreak(Skill _skill, int _lbNum)
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
         currentCharacterGO.currentSkill = _skill;
+        currentCharacterGO.lbSkillNum = _lbNum;
     }
 
     public void OnButtonPlayerGuard()
@@ -310,7 +311,8 @@ public class BattleManager : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
                 break;
             case BaseEntity.ANIMATION.LIMIT_BREAK:
-                StartCoroutine(currentCharacterGO.LimitBreakAnimation(camManager.mainCamera));
+                if (currentCharacterGO.lbList[currentCharacterGO.lbSkillNum])
+                    StartCoroutine(currentCharacterGO.LimitBreakAnimation(camManager.mainCamera, currentCharacterGO.lbSkillNum));
                 yield return new WaitForSeconds(currentCharacterGO.GetLBAnimationTime() - 0.5f);
                 break;
         }

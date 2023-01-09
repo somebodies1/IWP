@@ -7822,6 +7822,14 @@ PrefabInstance:
       propertyPath: HealthBar
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4936069355141434756, guid: a2a4645881ecd9e428f80562c779828f, type: 3}
+      propertyPath: lbList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4936069355141434756, guid: a2a4645881ecd9e428f80562c779828f, type: 3}
+      propertyPath: lbList.Array.data[0]
+      value: 
+      objectReference: {fileID: 4804730613816154192, guid: 679ea56a705c7fc498615de7eb1f87a7, type: 3}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: a2a4645881ecd9e428f80562c779828f, type: 3}
@@ -7886,6 +7894,10 @@ PrefabInstance:
       propertyPath: HealthBar
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7203740551025148826, guid: df0a4e1f78ed0d745865663c6c3c283d, type: 3}
+      propertyPath: lbList.Array.data[0]
+      value: 
+      objectReference: {fileID: 4804730613816154192, guid: 8fc989613cd2a4049832b2f6e84f56e7, type: 3}
     - target: {fileID: 7203740551025247417, guid: df0a4e1f78ed0d745865663c6c3c283d, type: 3}
       propertyPath: m_Name
       value: PlayerChar2
