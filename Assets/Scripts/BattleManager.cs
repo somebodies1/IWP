@@ -20,7 +20,7 @@ public class BattleManager : MonoBehaviour
         enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
 
         //Generate UI stuff
-        uiManager.SpawnAllSkillButtons(playerCharList);
+        //uiManager.SpawnAllSkillButtons(playerCharList);
 
         uiManager.SetAllEntityStatsUI(playerCharList, true);
         uiManager.SetAllEntityStatsUI(enemiesList, false);

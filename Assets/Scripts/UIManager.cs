@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
     public List<GameObject> targetButtonsList;
 
     public GameObject switchSkillsButton;
+    public List<GameObject> skillButtonList;
 
     public GameObject limitBreakButton;
     public List<GameObject> limitBreakButtonList;
@@ -84,37 +85,38 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SpawnAllSkillButtons(List<GameObject> _playerCharList)
+    public void OnButtonSkillSwitch()
     {
-        for (int i = 0; i < _playerCharList.Count; ++i)
+        SwitchCurrentPlayersSkillUI();
+    }
+
+    public void SwitchCurrentPlayersSkillUI()
+    {
+        List<Skill> currentPlayerSkillList = battleManager.currentCharacterTurn.GetComponent<BaseEntity>().skillList;
+
+        //Disable skill buttons
+        for (int i = 0; i < skillButtonList.Count; ++i)
         {
-            List<Skill> SkillList = _playerCharList[i].GetComponent<BaseEntity>().skillList;
-            string playerName = _playerCharList[i].GetComponent<BaseEntity>().entityName;
+            skillButtonList[i].SetActive(false);
+        }
 
-            var emptyGOPrefab = Instantiate(emptyGOUIPrefab, skillsUI.transform);
-            emptyGOPrefab.name = (playerName);
-
-            playerSkillsList.Add(emptyGOPrefab);
-
-            float buttonXPos = -450f;
-
-            for (int j = 0; j < SkillList.Count; ++j)
-            {
-                SpawnSkillButton(emptyGOPrefab.transform, new Vector3(buttonXPos + (j * 150), 0, 0), SkillList[j]);
-            }
+        //Enable limit break buttons that player has
+        for (int i = 0; i < currentPlayerSkillList.Count; ++i)
+        {
+            skillButtonList[i].SetActive(true);
+            SetSkillButton(skillButtonList[i], currentPlayerSkillList[i]);
         }
     }
 
-    public void SpawnSkillButton(Transform _parent, Vector3 _buttonPos, Skill _skill)
+    public void SetSkillButton(GameObject _button, Skill _skill)
     {
-        GameObject SkillButton = Instantiate(skillButton, new Vector3(0, 0, 0), Quaternion.identity, _parent);
-        SkillButton.transform.localPosition = _buttonPos;
+        Button skillButton = _button.GetComponent<Button>();
 
-        SkillButton.AddComponent<Skill>();
-        SkillButton.GetComponent<Skill>().OverwriteSkill(_skill);
+        skillButton.onClick.RemoveAllListeners();
+        skillButton.GetComponent<Skill>().OverwriteSkill(_skill);
 
-        SkillButton.GetComponent<Button>().onClick.AddListener(delegate { battleManager.OnButtonPlayerSkill(SkillButton.GetComponent<Skill>()); });
-        SkillButton.GetComponent<Button>().onClick.AddListener(delegate { SwitchAttackUI(targetSelectionUI); });
+        skillButton.GetComponent<Button>().onClick.AddListener(delegate { battleManager.OnButtonPlayerSkill(skillButton.GetComponent<Skill>()); });
+        skillButton.GetComponent<Button>().onClick.AddListener(delegate { SwitchAttackUI(targetSelectionUI); });
     }
 
     public void SetAllTargetButtons(List<GameObject> _enemiesList)
@@ -147,11 +149,6 @@ public class UIManager : MonoBehaviour
 
         //Change targets
         TargetButton.GetComponent<Button>().onClick.AddListener(delegate { battleManager.OnButtonPlayerTarget(_targetGO); });
-    }
-
-    public void OnButtonSkillSwitch()
-    {
-        SwitchCurrentPlayerSkillsUIByName(battleManager.currentCharacterTurn.GetComponent<BaseEntity>().entityName);
     }
 
     public void SetAllEntityStatsUI(List<GameObject> _charList, bool _isPlayerChar)
