@@ -83,6 +83,9 @@ public class BaseEntity : MonoBehaviour
     //Stats UI
     public GameObject entityStatsUI;
 
+    //Status
+    public bool isDead = false;
+
     public Animator animator;
     public AnimationClip idleClip;
     public AnimationClip attackClip;
@@ -153,7 +156,9 @@ public class BaseEntity : MonoBehaviour
     {
         if (!_targetGO.CheckIfCurrentActionGuard())
         {
-            _targetGO.fullGuardAmt -= 1;
+            if (_targetGO.fullGuardAmt > 0)
+                _targetGO.fullGuardAmt -= 1;
+
             Debug.Log("Guard break!");
         }
     }
@@ -241,11 +246,13 @@ public class BaseEntity : MonoBehaviour
         totalDmg *= CompareGuard(_targetGO);
         Debug.Log("afterGuard" + totalDmg);
 
-        //Finalized damage
-        _targetGO.CurrentHP -= (int)totalDmg;
-
         //Update limit break
         LimitBreakUpdater(_targetGO, totalDmg);
+
+        //Finalized damage
+        _targetGO.CurrentHP -= (int)totalDmg;
+        if (_targetGO.CurrentHP <= 0)
+            _targetGO.CurrentHP = 0;
 
         //Update both attacker and target stats
         UpdateStats();
