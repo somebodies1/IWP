@@ -62,6 +62,34 @@ public class BattleManager : MonoBehaviour
         uiManager.SetAllEntityStatsUI(enemiesList, false);
     }
 
+    private void DeleteDeadEnemies()
+    {
+        List<GameObject> enemiesToDelList = new List<GameObject>();
+
+        //Put all dead enemies into temp list
+        for (int i = 0; i < enemiesList.Count; ++i)
+        {
+            if (enemiesList[i].GetComponent<BaseEntity>().isDead == true)
+            {
+                enemiesToDelList.Add(enemiesList[i]);
+            }
+        }
+
+        //Delete GO
+        for (int i = 0; i < enemiesToDelList.Count; ++i)
+        {
+            enemiesList.Remove(enemiesToDelList[i]);
+            Destroy(enemiesToDelList[i]);
+        }
+
+        if (enemiesToDelList.Count == 0)
+            return;
+
+        //Update stats UI
+        uiManager.SetAllTargetButtons(enemiesList);
+        uiManager.SetAllEntityStatsUI(enemiesList, false);
+    }
+
     //Switch to player's turn
     private void SwitchToPlayerTurn()
     {
@@ -318,6 +346,9 @@ public class BattleManager : MonoBehaviour
         }
         camManager.SetMainCameraToOriginalState();
         currentCharacterGO.CalculateDamage(targetGO);
+
+        //Delete dead enemy
+        DeleteDeadEnemies();
 
         uiManager.ActivateActionUI();
 

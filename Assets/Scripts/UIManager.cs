@@ -177,7 +177,10 @@ public class UIManager : MonoBehaviour
         GameObject EntityStats = _statsGO;
 
         _char.entityStatsUI = EntityStats;
-        EntityStats.GetComponent<EntityStatsUI>().UpdateAllEntityStatsUIValues(_char.entityName, 1, 0, _char.fullGuardAmt);
+
+        float currentToMaxHealthRatio = (float)_char.CurrentHP / (float)_char.MaxHP;
+        float currentToMaxLBRatio = (float)_char.CurrentLB / (float)_char.MaxLB;
+        EntityStats.GetComponent<EntityStatsUI>().UpdateAllEntityStatsUIValues(_char.entityName, currentToMaxHealthRatio, currentToMaxLBRatio, _char.fullGuardAmt);
     }
 
     public void OnButtonLimitBreakSwitch()

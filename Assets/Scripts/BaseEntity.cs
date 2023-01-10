@@ -226,7 +226,7 @@ public class BaseEntity : MonoBehaviour
                 totalDmg = currentSkill.skillStrength;
                 break;
         }
-        Debug.Log("atkStat" + totalDmg);
+        //Debug.Log("atkStat" + totalDmg);
 
         //Compare against temperament
         TEMPERAMENT temperament = _tpAttack;
@@ -236,23 +236,28 @@ public class BaseEntity : MonoBehaviour
 
         float tpMultiplier = CompareTemperament(_targetGO, temperament);
         totalDmg *= tpMultiplier;
-        Debug.Log("afterTPDmg" + totalDmg);
+        //Debug.Log("afterTPDmg" + totalDmg);
 
         //Compare against defense
         totalDmg -= _targetGO.defStat;
-        Debug.Log("finalDmg: " + totalDmg);
+        //Debug.Log("finalDmg: " + totalDmg);
 
         //Compare against guard
         totalDmg *= CompareGuard(_targetGO);
-        Debug.Log("afterGuard" + totalDmg);
+        //Debug.Log("afterGuard" + totalDmg);
 
         //Update limit break
         LimitBreakUpdater(_targetGO, totalDmg);
 
         //Finalized damage
         _targetGO.CurrentHP -= (int)totalDmg;
+
+        //Check if dead
         if (_targetGO.CurrentHP <= 0)
+        {
             _targetGO.CurrentHP = 0;
+            _targetGO.isDead = true;
+        }
 
         //Update both attacker and target stats
         UpdateStats();
@@ -264,6 +269,7 @@ public class BaseEntity : MonoBehaviour
         float currentToMaxHealthRatio = (float)CurrentHP / (float)MaxHP;
         float currentToMaxLBRatio = (float)CurrentLB / (float)MaxLB;
         entityStatsUI.GetComponent<EntityStatsUI>().UpdateChangingValues(currentToMaxHealthRatio, currentToMaxLBRatio, fullGuardAmt);
+        Debug.Log("name: " + name);
     }
 
     //Triggers animations to start
