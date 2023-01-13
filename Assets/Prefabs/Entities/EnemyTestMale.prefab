@@ -1465,6 +1465,10 @@ MonoBehaviour:
   CurrentHP: 100
   MaxMP: 100
   CurrentMP: 100
+  MaxLB: 100
+  CurrentLB: 0
+  lbList: []
+  lbSkillNum: 0
   attackStat: 10
   defStat: 5
   currentAction: 0
@@ -1473,13 +1477,15 @@ MonoBehaviour:
   fullGuardAmt: 1
   entityType: 1
   tpWeaknessList: 00000000010000000100000001000000010000000100000001000000
-  HealthBar: {fileID: 0}
   entityStatsUI: {fileID: 0}
+  isDead: 0
   animator: {fileID: 1013640977822866347}
   idleClip: {fileID: 7400000, guid: 083c3917822dd164fafb1a91883fbff8, type: 2}
   attackClip: {fileID: 7400000, guid: 33a3f6352f52f9d45bdf449c4ecf1953, type: 2}
   skillClip: {fileID: 7400000, guid: 3e1b2198053972d4e9db7dfa32fbbad2, type: 2}
   guardClip: {fileID: 7400000, guid: af3f9f7d26f2d5d47a394978df788c24, type: 2}
+  lbClipList: []
+  weaponsList: []
 --- !u!1 &1013640977815448019
 GameObject:
   m_ObjectHideFlags: 0

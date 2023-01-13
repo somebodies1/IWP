@@ -6,6 +6,7 @@ public class BattleManager : MonoBehaviour
 {
     public UIManager uiManager;
     public CameraManager camManager;
+    public OverallGameManager gameManager;
 
     public List<GameObject> playerCharList;
     public List<GameObject> enemiesList;
@@ -33,6 +34,40 @@ public class BattleManager : MonoBehaviour
 
         //Player's turn first
         SwitchToPlayerTurn();
+    }
+
+    private void WinGame()
+    {
+        gameManager.ActivateFinishScreen();
+        gameManager.SetWinScreen();
+    }
+
+    private void LoseGame()
+    {
+        gameManager.ActivateFinishScreen();
+        gameManager.SetLoseScreen();
+    }
+
+    private bool CheckIfAllPlayerCharDead()
+    {
+        for (int i = 0; i < playerCharList.Count; ++i)
+        {
+            if (playerCharList[i].GetComponent<BaseEntity>().isDead != true)
+                return false;
+        }
+
+        return true;
+    }
+
+    private bool CheckIfAllEnemiesDead()
+    {
+        for (int i = 0; i < enemiesList.Count; ++i)
+        {
+            if (enemiesList[i].GetComponent<BaseEntity>().isDead != true)
+                return false;
+        }
+
+        return true;
     }
 
     private void AddPlayer()
@@ -114,11 +149,23 @@ public class BattleManager : MonoBehaviour
         {
             uiManager.limitBreakButton.SetActive(false);
         }
+
+        //Passes turn to next player if dead
+        if (currentCharacterBaseEntity.isDead)
+        {
+            NextPlayerTurn();
+        }
     }
 
     //When switching from player char to player char
     public void NextPlayerTurn()
     {
+        if(CheckIfAllEnemiesDead())
+        {
+            WinGame();
+            return;
+        }
+
         CurrentTurnCheck();
 
         currentCharacterTurn.GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.TURN_ENDED);
@@ -155,6 +202,12 @@ public class BattleManager : MonoBehaviour
             {
                 uiManager.limitBreakButton.SetActive(false);
             }
+
+            //Passes turn to next player if dead
+            if (currentCharacterBaseEntity.isDead)
+            {
+                NextPlayerTurn();
+            }
         }
     }
 
@@ -182,6 +235,12 @@ public class BattleManager : MonoBehaviour
 
     private void NextEnemyTurnConditions()
     {
+        if (CheckIfAllPlayerCharDead())
+        {
+            LoseGame();
+            return;
+        }
+            
         currentCharacterTurn.GetComponent<EnemyFSM>().SetCurrentState(EnemyFSM.TURN_STATE.TURN_ENDED);
 
         int currentEnemyIndex = enemiesList.IndexOf(currentCharacterTurn);
@@ -306,6 +365,7 @@ public class BattleManager : MonoBehaviour
         {
             BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
             currentCharacterGO.CalculateDamage(targetGO);
+            NextEnemyTurnConditions();
         }
     }
 
