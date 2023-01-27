@@ -157,7 +157,7 @@ public class BattleManager : MonoBehaviour
     //Switch to player's turn
     private void SwitchToPlayerTurn()
     {
-        if (!CheckIfAllEnemiesDead())
+        if (!CheckIfAllEnemiesDead() && uiManager.cutsceneEnd)
             uiManager.ActivateActionUI();
 
         playerCharList[0].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);

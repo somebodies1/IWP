@@ -36,6 +36,23 @@ public class UIManager : MonoBehaviour
     public GameObject emptyGOUIPrefab;
     public GameObject skillButton;
 
+    //Cutscene
+    public bool cutsceneEnd = false;
+
+    public void ActivateMainUI()
+    {
+        playerStatsUI.SetActive(true);
+        enemyStatsUI.SetActive(true);
+        overallActionUI.SetActive(true);
+    }
+
+    public void DeactivateMainUI()
+    {
+        playerStatsUI.SetActive(false);
+        enemyStatsUI.SetActive(false);
+        overallActionUI.SetActive(false);
+    }
+
     public void ActivateActionUI()
     {
         overallActionUI.SetActive(true);
