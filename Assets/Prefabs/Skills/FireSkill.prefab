@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: Fire
-  skillStrength: 10
+  skillType: 1
+  skillStrength: 20

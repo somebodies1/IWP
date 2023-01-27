@@ -123,14 +123,21 @@ public class BaseEntity : MonoBehaviour
         CurrentLB = 0;
     }
 
-    void LimitBreakUpdater(BaseEntity _targetGO, float _totalDmg)
+    void LimitBreakUpdater(float _totalDmg)
     {
         if (currentAction == ACTION.LIMIT_BREAK)
             return;
 
-        //Do some calcs here
+        int baseLB = 20;
+        int dmgLB = 0;
 
-        CurrentLB += 100;
+        if (_totalDmg > 0)
+            dmgLB = (int)_totalDmg;
+        else if (_totalDmg > 20)
+            dmgLB = 20;
+
+        CurrentLB += baseLB + dmgLB;
+        //CurrentLB += 100;
 
         if (CurrentLB > MaxLB)
             CurrentLB = MaxLB;
@@ -158,8 +165,6 @@ public class BaseEntity : MonoBehaviour
         {
             if (_targetGO.fullGuardAmt > 0)
                 _targetGO.fullGuardAmt -= 1;
-
-            Debug.Log("Guard break!");
         }
     }
 
@@ -226,7 +231,6 @@ public class BaseEntity : MonoBehaviour
                 totalDmg = currentSkill.skillStrength;
                 break;
         }
-        //Debug.Log("atkStat" + totalDmg);
 
         //Compare against temperament
         TEMPERAMENT temperament = _tpAttack;
@@ -236,18 +240,16 @@ public class BaseEntity : MonoBehaviour
 
         float tpMultiplier = CompareTemperament(_targetGO, temperament);
         totalDmg *= tpMultiplier;
-        //Debug.Log("afterTPDmg" + totalDmg);
 
         //Compare against defense
         totalDmg -= _targetGO.defStat;
-        //Debug.Log("finalDmg: " + totalDmg);
 
         //Compare against guard
         totalDmg *= CompareGuard(_targetGO);
-        //Debug.Log("afterGuard" + totalDmg);
 
         //Update limit break
-        LimitBreakUpdater(_targetGO, totalDmg);
+        LimitBreakUpdater(totalDmg);
+        _targetGO.LimitBreakUpdater(totalDmg);
 
         //Finalized damage
         _targetGO.CurrentHP -= (int)totalDmg;
@@ -269,7 +271,6 @@ public class BaseEntity : MonoBehaviour
         float currentToMaxHealthRatio = (float)CurrentHP / (float)MaxHP;
         float currentToMaxLBRatio = (float)CurrentLB / (float)MaxLB;
         entityStatsUI.GetComponent<EntityStatsUI>().UpdateChangingValues(currentToMaxHealthRatio, currentToMaxLBRatio, fullGuardAmt);
-        Debug.Log("name: " + name);
     }
 
     //Triggers animations to start

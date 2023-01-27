@@ -939,7 +939,7 @@ MonoBehaviour:
   lbList:
   - {fileID: 4804730613816154192, guid: 8fc989613cd2a4049832b2f6e84f56e7, type: 3}
   lbSkillNum: 0
-  attackStat: 10
+  attackStat: 20
   defStat: 5
   currentAction: 0
   skillList:

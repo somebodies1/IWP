@@ -46,4 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Water
   skillType: 2
-  skillStrength: 5
+  skillStrength: 25

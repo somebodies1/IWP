@@ -46,4 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Earth
   skillType: 3
-  skillStrength: 15
+  skillStrength: 30
