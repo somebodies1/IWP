@@ -7,7 +7,12 @@ public class OverallGameManager : MonoBehaviour
 {
     public GameObject winloseUI;
     public TextMeshProUGUI winloseText;
+    public int roundNum;
 
+    private void Start()
+    {
+        roundNum = 1;
+    }
     public void ActivateFinishScreen()
     {
         winloseUI.SetActive(true);

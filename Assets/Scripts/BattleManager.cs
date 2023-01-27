@@ -47,19 +47,26 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator WinRound()
     {
+        gameManager.roundNum++;
         //Wait for round to end
         yield return new WaitForSeconds(1.0f);
 
-        uiManager.ActivateActionUI();
+        if (gameManager.roundNum > 5)
+        {
+            WinGame();
+        }
+        else
+        {
+            uiManager.ActivateActionUI();
 
-        DeleteDeadEnemies();
-        entitySpawner.SpawnEnemies();
+            DeleteDeadEnemies();
+            //entitySpawner.SpawnEnemies();
+            entitySpawner.SpawnEnemyRound(gameManager.roundNum);
 
-        enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
-        uiManager.SetAllEntityStatsUI(enemiesList, false);
-        uiManager.SetAllTargetButtons(enemiesList);
-
-        //WinGame();
+            enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+            uiManager.SetAllEntityStatsUI(enemiesList, false);
+            uiManager.SetAllTargetButtons(enemiesList);
+        }
     }
 
     private void LoseGame()
@@ -137,10 +144,10 @@ public class BattleManager : MonoBehaviour
             Destroy(enemiesToDelList[i]);
         }
 
-        if (enemiesToDelList.Count == 0)
-        {
-            enemiesList = new List<GameObject>();
-        }
+        //if (enemiesToDelList.Count == 0)
+        //{
+        //    enemiesList = new List<GameObject>();
+        //}
 
         //Update stats UI
         uiManager.SetAllTargetButtons(enemiesList);
