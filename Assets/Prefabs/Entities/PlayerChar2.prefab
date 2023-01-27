@@ -937,7 +937,8 @@ MonoBehaviour:
   MaxLB: 100
   CurrentLB: 0
   lbList:
-  - {fileID: 3503931448708439817, guid: 99b67808f1849b947bd87b578511a23a, type: 3}
+  - {fileID: 4804730613816154192, guid: 8fc989613cd2a4049832b2f6e84f56e7, type: 3}
+  lbSkillNum: 0
   attackStat: 10
   defStat: 5
   currentAction: 0
@@ -949,11 +950,14 @@ MonoBehaviour:
   entityType: 0
   tpWeaknessList: 00000000010000000100000001000000010000000100000001000000
   entityStatsUI: {fileID: 0}
+  isDead: 0
   animator: {fileID: 7203740551017838327}
   idleClip: {fileID: 7400000, guid: 083c3917822dd164fafb1a91883fbff8, type: 2}
   attackClip: {fileID: 7400000, guid: 33a3f6352f52f9d45bdf449c4ecf1953, type: 2}
   skillClip: {fileID: 7400000, guid: 3e1b2198053972d4e9db7dfa32fbbad2, type: 2}
   guardClip: {fileID: 7400000, guid: af3f9f7d26f2d5d47a394978df788c24, type: 2}
+  lbClipList: []
+  weaponsList: []
 --- !u!114 &7203740551025148827
 MonoBehaviour:
   m_ObjectHideFlags: 0

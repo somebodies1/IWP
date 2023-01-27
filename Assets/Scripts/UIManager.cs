@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
     public void ActivateActionUI()
     {
         overallActionUI.SetActive(true);
+        Debug.Log("ActivateActionUI");
     }
 
     public void DeactivateActionUI()
@@ -169,6 +170,14 @@ public class UIManager : MonoBehaviour
         {
             statsUIList[i].SetActive(true);
             SetEntityStatsUI(statsUIList[i], _charList[i].GetComponent<BaseEntity>());
+        }
+    }
+
+    public void DisableAllEnemyStatsUI()
+    {
+        for (int i = 0; i < enemyStatsUIList.Count; ++i)
+        {
+            enemyStatsUIList[i].SetActive(false);
         }
     }
 

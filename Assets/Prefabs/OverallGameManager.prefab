@@ -46,3 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winloseUI: {fileID: 0}
   winloseText: {fileID: 0}
+  enemyPrefabList:
+  - {fileID: 1013640977815448017, guid: 012a27add6266d84099652b5d5631485, type: 3}
+  - {fileID: 8057707200871999731, guid: 1da2e9d85fee03742a25ea5dafabdf63, type: 3}

@@ -8,6 +8,8 @@ public class BattleManager : MonoBehaviour
     public CameraManager camManager;
     public OverallGameManager gameManager;
 
+    public EntitySpawner entitySpawner;
+
     public List<GameObject> playerCharList;
     public List<GameObject> enemiesList;
 
@@ -40,6 +42,24 @@ public class BattleManager : MonoBehaviour
     {
         gameManager.ActivateFinishScreen();
         gameManager.SetWinScreen();
+
+    }
+
+    IEnumerator WinRound()
+    {
+        //Wait for round to end
+        yield return new WaitForSeconds(1.0f);
+
+        uiManager.ActivateActionUI();
+
+        DeleteDeadEnemies();
+        entitySpawner.SpawnEnemies();
+
+        enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+        uiManager.SetAllEntityStatsUI(enemiesList, false);
+        uiManager.SetAllTargetButtons(enemiesList);
+
+        //WinGame();
     }
 
     private void LoseGame()
@@ -118,7 +138,9 @@ public class BattleManager : MonoBehaviour
         }
 
         if (enemiesToDelList.Count == 0)
-            return;
+        {
+            enemiesList = new List<GameObject>();
+        }
 
         //Update stats UI
         uiManager.SetAllTargetButtons(enemiesList);
@@ -128,7 +150,9 @@ public class BattleManager : MonoBehaviour
     //Switch to player's turn
     private void SwitchToPlayerTurn()
     {
-        uiManager.ActivateActionUI();
+        if (!CheckIfAllEnemiesDead())
+            uiManager.ActivateActionUI();
+
         playerCharList[0].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
         currentCharacterTurn = playerCharList[0];
 
@@ -162,8 +186,9 @@ public class BattleManager : MonoBehaviour
     {
         if(CheckIfAllEnemiesDead())
         {
-            WinGame();
-            return;
+            Debug.Log("DeactivateActionUI");
+            uiManager.DeactivateActionUI();
+            StartCoroutine(WinRound());
         }
 
         CurrentTurnCheck();
@@ -177,7 +202,14 @@ public class BattleManager : MonoBehaviour
         if (currentPlayerCharIndex >=  playerCharList.Count - 1)
         {
             //Switch to enemies' turn
-            SwitchToEnemyTurn();
+            if (CheckIfAllEnemiesDead())
+            {
+                SwitchToPlayerTurn();
+            }
+            else
+            {
+                SwitchToEnemyTurn();
+            }
         }
         else
         {
