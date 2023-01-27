@@ -13,7 +13,6 @@ public class CutsceneManager : MonoBehaviour
     private List<string> nameTextList;
     private int textNum, maxTextNum;
 
-    // Start is called before the first frame update
     void Start()
     {
         uiManager.DeactivateMainUI();
