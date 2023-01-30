@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
     public GameObject skillButton;
 
     //Cutscene
+    public GameObject cutsceneUI;
     public bool cutsceneEnd = false;
 
     public void ActivateMainUI()
@@ -246,5 +247,15 @@ public class UIManager : MonoBehaviour
 
         lbButton.onClick.AddListener(delegate { battleManager.OnButtonPlayerLimitBreak(_lb, _lbNum); });
         lbButton.onClick.AddListener(delegate { SwitchAttackUI(targetSelectionUI); });
+    }
+
+    public void ActivateCutsceneUI()
+    {
+        cutsceneUI.SetActive(true);
+    }
+
+    public void DeactivateCutsceneUI()
+    {
+        cutsceneUI.SetActive(false);
     }
 }

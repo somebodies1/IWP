@@ -18,6 +18,10 @@ public class BattleManager : MonoBehaviour
     //Turns always start with player
     private void Start()
     {
+        entitySpawner.InitSpawnLocations();
+        entitySpawner.SpawnAllPlayerChar();
+        entitySpawner.SpawnEnemyRound(1);
+
         //Add GOs to lists
         playerCharList.AddRange(GameObject.FindGameObjectsWithTag("PlayerChar"));
         enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
@@ -36,13 +40,17 @@ public class BattleManager : MonoBehaviour
 
         //Player's turn first
         SwitchToPlayerTurn();
+
+        gameManager.StartIntroCutscene();
     }
 
     private void WinGame()
     {
-        gameManager.ActivateFinishScreen();
-        gameManager.SetWinScreen();
+        //gameManager.ActivateFinishScreen();
+        //gameManager.SetWinScreen();
 
+        gameManager.gameWin = true;
+        gameManager.StartEndCutscene();
     }
 
     IEnumerator WinRound()
@@ -57,6 +65,13 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            for (int i = 0; i < playerCharList.Count; ++i)
+            {
+                BaseEntity p = playerCharList[i].GetComponent<BaseEntity>();
+                p.CurrentHP = p.MaxHP;
+                p.UpdateStats();
+            }
+
             uiManager.ActivateActionUI();
 
             DeleteDeadEnemies();

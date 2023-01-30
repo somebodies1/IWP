@@ -20,6 +20,12 @@ public class EntitySpawner : MonoBehaviour
 
     void Start()
     {
+        //SpawnAllPlayerChar();
+        //SpawnEnemyRound(1);
+    }
+
+    public void InitSpawnLocations()
+    {
         //Player spawn location
         for (int i = 0; i < maxPlayerChar; ++i)
         {
@@ -31,8 +37,6 @@ public class EntitySpawner : MonoBehaviour
         {
             enemySpawnLocation.Add(i, new Vector3(3, 0, -5 + (i * -1.0f)));
         }
-        SpawnAllPlayerChar();
-        SpawnEnemyRound(1);
     }
 
     public void SpawnAllPlayerChar()

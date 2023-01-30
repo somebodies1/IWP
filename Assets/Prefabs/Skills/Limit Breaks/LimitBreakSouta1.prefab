@@ -62,9 +62,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lbSkill: {fileID: 995568851805104994}
   v3CameraPosition:
-  - {x: -3, y: 1, z: -6}
-  - {x: -1.5, y: 1, z: -5}
-  - {x: -5, y: 1, z: -5}
+  - {x: -3, y: 1, z: -7.5}
+  - {x: -1.5, y: 1, z: -6.5}
+  - {x: -5, y: 1, z: -6.5}
   v3CameraRotation:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: -90, z: 0}
