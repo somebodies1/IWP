@@ -2194,6 +2194,14 @@ PrefabInstance:
       propertyPath: goPlayerCharParent
       value: 
       objectReference: {fileID: 306973991}
+    - target: {fileID: 7393133014651492100, guid: d8545824791b8e142bc8d12cb279459f, type: 3}
+      propertyPath: enemyList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7393133014651492100, guid: d8545824791b8e142bc8d12cb279459f, type: 3}
+      propertyPath: enemyList.Array.data[2]
+      value: 
+      objectReference: {fileID: 1013640977815448017, guid: db5bc11997d1fa346942cd9f9a9ebdd4, type: 3}
     - target: {fileID: 7393133014651492101, guid: d8545824791b8e142bc8d12cb279459f, type: 3}
       propertyPath: m_RootOrder
       value: -1

@@ -14,6 +14,7 @@ public class EntitySpawner : MonoBehaviour
     public List<GameObject> enemyList;
     //0 - Strong
     //1 - Weak
+    //2 - Boss
 
     public Transform goPlayerCharParent;
     public Transform goEnemyParent;
@@ -93,10 +94,7 @@ public class EntitySpawner : MonoBehaviour
                 }
                 break;
             case 5:
-                for (int i = 0; i < 2; ++i)
-                {
-                    SpawnEnemyType(enemyList[0], enemySpawnLocation[i]);
-                }
+                SpawnEnemyType(enemyList[2], enemySpawnLocation[0]);
                 break;
         }
     }
