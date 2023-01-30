@@ -32,6 +32,10 @@ public class UIManager : MonoBehaviour
     public GameObject limitBreakButton;
     public List<GameObject> limitBreakButtonList;
 
+    //Damage UI
+    public GameObject playerDamageUI;
+    public GameObject enemyDamageUI;
+
     //Prefabs
     public GameObject emptyGOUIPrefab;
     public GameObject skillButton;
@@ -257,5 +261,21 @@ public class UIManager : MonoBehaviour
     public void DeactivateCutsceneUI()
     {
         cutsceneUI.SetActive(false);
+    }
+
+    public IEnumerator ActivatePlayerDamageUI(int _dmg)
+    {
+        playerDamageUI.SetActive(true);
+        playerDamageUI.GetComponent<TextMeshProUGUI>().text = "PLAYER DAMAGE:\n" + _dmg.ToString();
+        yield return new WaitForSeconds(0.5f);
+        playerDamageUI.SetActive(false);
+    }
+
+    public IEnumerator ActivateEnemyDamageUI(int _dmg)
+    {
+        enemyDamageUI.SetActive(true);
+        enemyDamageUI.GetComponent<TextMeshProUGUI>().text = "ENEMY DAMAGE:\n" + _dmg.ToString();
+        yield return new WaitForSeconds(0.5f);
+        enemyDamageUI.SetActive(false);
     }
 }

@@ -459,7 +459,7 @@ public class BattleManager : MonoBehaviour
                 break;
         }
         camManager.SetMainCameraToOriginalState();
-        currentCharacterGO.CalculateDamage(targetGO);
+        StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO)));
 
         //Delete dead enemy
         DeleteDeadEnemies();
@@ -485,7 +485,7 @@ public class BattleManager : MonoBehaviour
         currentCharacterTurn.transform.position = oldCCPos;
         camManager.SetMainCameraToOriginalState();
 
-        currentCharacterGO.CalculateDamage(targetGO);
+        StartCoroutine(uiManager.ActivateEnemyDamageUI(currentCharacterGO.CalculateDamage(targetGO)));
 
         NextEnemyTurnConditions();
     }

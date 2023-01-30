@@ -211,10 +211,10 @@ public class BaseEntity : MonoBehaviour
     }
 
     //Total damage calculation
-    public void CalculateDamage(BaseEntity _targetGO, TEMPERAMENT _tpAttack = TEMPERAMENT.NONE)
+    public int CalculateDamage(BaseEntity _targetGO, TEMPERAMENT _tpAttack = TEMPERAMENT.NONE)
     {
         if (CheckIfCurrentActionGuard())
-            return;
+            return -1;
 
         float totalDmg = 0;
         
@@ -264,6 +264,8 @@ public class BaseEntity : MonoBehaviour
         //Update both attacker and target stats
         UpdateStats();
         _targetGO.UpdateStats();
+
+        return (int)totalDmg;
     }
 
     public void UpdateStats()
