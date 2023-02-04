@@ -434,7 +434,21 @@ public class BattleManager : MonoBehaviour
         else
         {
             BaseEntity targetGO = _targetGO.GetComponent<BaseEntity>();
-            currentCharacterGO.CalculateDamage(targetGO);
+
+            if (currentCharacterGO.currentAction == BaseEntity.ACTION.TEAM_ATTACK)
+            {
+                float bonusDmg = 0;
+                for (int i = 0; i < playerCharList.Count; ++i)
+                {
+                    bonusDmg += playerCharList[i].GetComponent<BaseEntity>().attackStat * 1.5f;
+                }
+                bonusDmg -= currentCharacterTurn.GetComponent<BaseEntity>().attackStat;
+                StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO, bonusDmg), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
+            }
+            else
+            {
+                StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
+            }
 
             NextPlayerTurn();
         }
@@ -529,11 +543,11 @@ public class BattleManager : MonoBehaviour
                 bonusDmg += playerCharList[i].GetComponent<BaseEntity>().attackStat * 1.5f;
             }
             bonusDmg -= currentCharacterTurn.GetComponent<BaseEntity>().attackStat;
-            StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO, bonusDmg)));
+            StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO, bonusDmg), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
         }
         else
         {
-            StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO)));
+            StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
         }
             
 
@@ -561,7 +575,7 @@ public class BattleManager : MonoBehaviour
         currentCharacterTurn.transform.position = oldCCPos;
         camManager.SetMainCameraToOriginalState();
 
-        StartCoroutine(uiManager.ActivateEnemyDamageUI(currentCharacterGO.CalculateDamage(targetGO)));
+        StartCoroutine(uiManager.ActivateEnemyDamageUI(currentCharacterGO.CalculateDamage(targetGO), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
 
         NextEnemyTurnConditions();
     }

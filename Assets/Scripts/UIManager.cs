@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
     //Damage UI
     public GameObject playerDamageUI;
     public GameObject enemyDamageUI;
+    public List<Sprite> effectiveDamageSpriteList;
 
     //Prefabs
     public GameObject emptyGOUIPrefab;
@@ -270,18 +271,56 @@ public class UIManager : MonoBehaviour
         cutsceneUI.SetActive(false);
     }
 
-    public IEnumerator ActivatePlayerDamageUI(int _dmg)
+    public IEnumerator ActivatePlayerDamageUI(int _dmg, int _effectID)
     {
         playerDamageUI.SetActive(true);
         playerDamageUI.GetComponent<TextMeshProUGUI>().text = "PLAYER DAMAGE:\n" + _dmg.ToString();
+
+        Transform child = playerDamageUI.transform.GetChild(0);
+
+        switch (_effectID)
+        {
+            case 1:
+                child.GetComponent<Image>().sprite = effectiveDamageSpriteList[2];
+                break;
+            case 0:
+                child.GetComponent<Image>().sprite = effectiveDamageSpriteList[1];
+                break;
+            case -1:
+                child.GetComponent<Image>().sprite = effectiveDamageSpriteList[0];
+                break;
+            default:
+                child.GetComponent<Image>().sprite = effectiveDamageSpriteList[1];
+                break;
+        }
+        
         yield return new WaitForSeconds(0.5f);
         playerDamageUI.SetActive(false);
     }
 
-    public IEnumerator ActivateEnemyDamageUI(int _dmg)
+    public IEnumerator ActivateEnemyDamageUI(int _dmg, int _effectID)
     {
         enemyDamageUI.SetActive(true);
         enemyDamageUI.GetComponent<TextMeshProUGUI>().text = "ENEMY DAMAGE:\n" + _dmg.ToString();
+
+        Transform child = playerDamageUI.transform.GetChild(0);
+
+        switch (_effectID)
+        {
+            case 1:
+                child.GetComponent<Image>().sprite = effectiveDamageSpriteList[2];
+                break;
+            case 0:
+                child.GetComponent<Image>().sprite = effectiveDamageSpriteList[1];
+                break;
+            case -1:
+                child.GetComponent<Image>().sprite = effectiveDamageSpriteList[0];
+                break;
+            default:
+                child.GetComponent<Image>().sprite = effectiveDamageSpriteList[1];
+                break;
+        }
+
         yield return new WaitForSeconds(0.5f);
         enemyDamageUI.SetActive(false);
     }

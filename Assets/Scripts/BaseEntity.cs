@@ -183,6 +183,22 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
+    public int CheckTargetTemperamentWeakness(BaseEntity _targetGO, TEMPERAMENT _tpAttack = TEMPERAMENT.NONE)
+    {
+        TEMPERAMENT temperament = _tpAttack;
+
+        if (currentSkill)
+            temperament = currentSkill.skillType;
+
+        if (_targetGO.tpWeaknessList[(int)temperament] == 1)
+            return 1;
+
+        if (_targetGO.tpWeaknessList[(int)temperament] == -1)
+            return -1;
+
+        return 0;
+    }
+
     //Temperament effects
     float CompareTemperament(BaseEntity _targetGO, TEMPERAMENT _tpAttack = TEMPERAMENT.NONE)
     {
