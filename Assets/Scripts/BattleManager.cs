@@ -200,6 +200,15 @@ public class BattleManager : MonoBehaviour
             uiManager.limitBreakButton.SetActive(false);
         }
 
+        if (CheckIfTeamAttackAvailable())
+        {
+            uiManager.teamAttackButton.SetActive(true);
+        }
+        else
+        {
+            uiManager.teamAttackButton.SetActive(false);
+        }
+
         //Passes turn to next player if dead
         if (currentCharacterBaseEntity.isDead)
         {
@@ -259,6 +268,15 @@ public class BattleManager : MonoBehaviour
             else
             {
                 uiManager.limitBreakButton.SetActive(false);
+            }
+
+            if (CheckIfTeamAttackAvailable())
+            {
+                uiManager.teamAttackButton.SetActive(true);
+            }
+            else
+            {
+                uiManager.teamAttackButton.SetActive(false);
             }
 
             //Passes turn to next player if dead or used team attack
@@ -556,5 +574,15 @@ public class BattleManager : MonoBehaviour
             return;
 
         uiManager.SwitchCurrentPlayerSkillsUIByName(currentEntity.entityName);
+    }
+
+    public bool CheckIfTeamAttackAvailable()
+    {
+        int currentPlayerCharIndex = playerCharList.IndexOf(currentCharacterTurn);
+
+        if (currentPlayerCharIndex == 0)
+            return true;
+
+        return false;
     }
 }

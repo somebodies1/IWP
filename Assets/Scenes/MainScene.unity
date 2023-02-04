@@ -1491,6 +1491,7 @@ MonoBehaviour:
   - {fileID: 1214612645}
   - {fileID: 400459116}
   - {fileID: 1406615284}
+  teamAttackButton: {fileID: 1255932065}
   limitBreakButton: {fileID: 252935139}
   limitBreakButtonList:
   - {fileID: 305589422}

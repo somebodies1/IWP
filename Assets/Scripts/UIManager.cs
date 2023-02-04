@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     public GameObject switchSkillsButton;
     public List<GameObject> skillButtonList;
 
+    public GameObject teamAttackButton;
+
     public GameObject limitBreakButton;
     public List<GameObject> limitBreakButtonList;
 
