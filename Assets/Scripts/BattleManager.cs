@@ -175,7 +175,11 @@ public class BattleManager : MonoBehaviour
         if (!CheckIfAllEnemiesDead() && uiManager.cutsceneEnd)
             uiManager.ActivateActionUI();
 
-        playerCharList[0].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
+        for (int i = 0; i < playerCharList.Count; ++i)
+        {
+            playerCharList[i].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
+        }
+        //playerCharList[0].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
         currentCharacterTurn = playerCharList[0];
 
         BaseEntity currentCharacterBaseEntity = currentCharacterTurn.GetComponent<BaseEntity>();
@@ -236,7 +240,7 @@ public class BattleManager : MonoBehaviour
         else
         {
             //Switch to next player's character's turn
-            playerCharList[currentPlayerCharIndex + 1].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
+            //playerCharList[currentPlayerCharIndex + 1].GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
             currentCharacterTurn = playerCharList[currentPlayerCharIndex + 1];
 
             BaseEntity currentCharacterBaseEntity = currentCharacterTurn.GetComponent<BaseEntity>();
@@ -257,10 +261,15 @@ public class BattleManager : MonoBehaviour
                 uiManager.limitBreakButton.SetActive(false);
             }
 
-            //Passes turn to next player if dead
-            if (currentCharacterBaseEntity.isDead)
+            //Passes turn to next player if dead or used team attack
+            if (currentCharacterBaseEntity.isDead ||
+                currentCharacterTurn.GetComponent<PlayerFSM>().currentState == PlayerFSM.TURN_STATE.TURN_ENDED)
             {
                 NextPlayerTurn();
+            }
+            else
+            {
+                currentCharacterTurn.GetComponent<PlayerFSM>().SetCurrentState(PlayerFSM.TURN_STATE.SELECTING);
             }
         }
     }
@@ -388,12 +397,20 @@ public class BattleManager : MonoBehaviour
     void PlayerTarget(BaseEntity _targetGO, BaseEntity.ANIMATION _animation)
     {
         BaseEntity currentCharacterGO = currentCharacterTurn.GetComponent<BaseEntity>();
+        
+        //Ends next player char's turn if using team attack
+        if (currentCharacterGO.currentAction == BaseEntity.ACTION.TEAM_ATTACK)
+        {
+            int currentPlayerCharIndex = playerCharList.IndexOf(currentCharacterTurn);
+            playerCharList[currentPlayerCharIndex + 1].GetComponent<PlayerFSM>().currentState = PlayerFSM.TURN_STATE.TURN_ENDED;
+        }
 
         if (currentCharacterGO.BaseEntityAnimation(_animation))
         {
             uiManager.DeactivateActionUI();
             //if (_animation == BaseEntity.ANIMATION.LIMIT_BREAK)
             //    StartCoroutine(currentCharacterGO.LimitBreakAnimation(camManager.mainCamera));
+            
             StartCoroutine(WaitForPlayerAnimation(_targetGO.gameObject, _animation));
         }
         else
@@ -439,12 +456,38 @@ public class BattleManager : MonoBehaviour
         switch (_animation)
         {
             case BaseEntity.ANIMATION.ATTACK:
-                currentCharacterTurn.transform.position = new Vector3(_targetGO.transform.position.x - 1, oldCCPos.y, _targetGO.transform.position.z);
-                camManager.CameraCloseUp(new Vector3(_targetGO.transform.position.x - 1.5f, 1, _targetGO .transform.position.z - 2));
+                if (currentCharacterGO.currentAction == BaseEntity.ACTION.TEAM_ATTACK)
+                {
+                    List<Vector3> oldPosList = new List<Vector3>();
+                    for (int i = 0; i < playerCharList.Count; ++i)
+                    {
+                        oldPosList.Add(playerCharList[i].transform.position);
+                        playerCharList[i].transform.position = new Vector3(_targetGO.transform.position.x - 1, oldCCPos.y, _targetGO.transform.position.z - 0.5f + (i * 1));
 
-                yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
+                        if (playerCharList[i] != currentCharacterTurn)
+                        {
+                            playerCharList[i].GetComponent<BaseEntity>().BaseEntityAnimation(_animation);
+                        }
+                    }
+                    camManager.CameraCloseUp(new Vector3(_targetGO.transform.position.x - 1.5f, 1, _targetGO.transform.position.z - 2));
 
-                currentCharacterTurn.transform.position = oldCCPos;
+                    yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
+
+                    for (int i = 0; i < playerCharList.Count; ++i)
+                    {
+                        playerCharList[i].transform.position = oldPosList[i];
+                    }
+                    oldPosList.Clear();
+                }
+                else
+                {
+                    currentCharacterTurn.transform.position = new Vector3(_targetGO.transform.position.x - 1, oldCCPos.y, _targetGO.transform.position.z);
+                    camManager.CameraCloseUp(new Vector3(_targetGO.transform.position.x - 1.5f, 1, _targetGO.transform.position.z - 2));
+
+                    yield return new WaitForSeconds(currentCharacterGO.attackClip.length);
+
+                    currentCharacterTurn.transform.position = oldCCPos;
+                }
                 break;
             case BaseEntity.ANIMATION.SKILL:
                 yield return new WaitForSeconds(currentCharacterGO.skillClip.length);
@@ -459,7 +502,22 @@ public class BattleManager : MonoBehaviour
                 break;
         }
         camManager.SetMainCameraToOriginalState();
-        StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO)));
+
+        if (currentCharacterGO.currentAction == BaseEntity.ACTION.TEAM_ATTACK)
+        {
+            float bonusDmg = 0;
+            for (int i = 0; i < playerCharList.Count; ++i)
+            {
+                bonusDmg += playerCharList[i].GetComponent<BaseEntity>().attackStat * 1.5f;
+            }
+            bonusDmg -= currentCharacterTurn.GetComponent<BaseEntity>().attackStat;
+            StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO, bonusDmg)));
+        }
+        else
+        {
+            StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO)));
+        }
+            
 
         //Delete dead enemy
         DeleteDeadEnemies();

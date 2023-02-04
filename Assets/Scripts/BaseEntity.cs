@@ -30,6 +30,7 @@ public class BaseEntity : MonoBehaviour
         GUARD,
         FULL_GUARD,
         LIMIT_BREAK,
+        TEAM_ATTACK,
         ACTION_NUM
     }
 
@@ -211,12 +212,12 @@ public class BaseEntity : MonoBehaviour
     }
 
     //Total damage calculation
-    public int CalculateDamage(BaseEntity _targetGO, TEMPERAMENT _tpAttack = TEMPERAMENT.NONE)
+    public int CalculateDamage(BaseEntity _targetGO, float _bonusDmg = 0, TEMPERAMENT _tpAttack = TEMPERAMENT.NONE)
     {
         if (CheckIfCurrentActionGuard())
             return -1;
 
-        float totalDmg = 0;
+        float totalDmg = 0 + _bonusDmg;
         
         //Source of attack stat
         switch (currentAction)
@@ -321,6 +322,8 @@ public class BaseEntity : MonoBehaviour
                 return ANIMATION.GUARD;
             case ACTION.LIMIT_BREAK:
                 return ANIMATION.LIMIT_BREAK;
+            case ACTION.TEAM_ATTACK:
+                return ANIMATION.ATTACK;
         }
 
         return ANIMATION.IDLE;
