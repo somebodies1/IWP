@@ -140,6 +140,11 @@ public class UIManager : MonoBehaviour
         skillButton.onClick.RemoveAllListeners();
         skillButton.GetComponent<Skill>().OverwriteSkill(_skill);
 
+        //UI
+        Transform child = skillButton.transform.GetChild(0);
+        child.GetComponent<TextMeshProUGUI>().text = _skill.skillName;
+
+        //Listeners
         skillButton.GetComponent<Button>().onClick.AddListener(delegate { battleManager.OnButtonPlayerSkill(skillButton.GetComponent<Skill>()); });
         skillButton.GetComponent<Button>().onClick.AddListener(delegate { SwitchAttackUI(targetSelectionUI); });
     }
