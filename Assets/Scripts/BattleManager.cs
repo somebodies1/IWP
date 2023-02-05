@@ -450,7 +450,8 @@ public class BattleManager : MonoBehaviour
             }
             else
             {
-                StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
+                if (!currentCharacterGO.CheckIfCurrentActionGuard())
+                    StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
             }
 
             if (CheckIfAllEnemiesDead())
