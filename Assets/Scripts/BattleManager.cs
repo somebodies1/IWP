@@ -55,6 +55,7 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator WinRound()
     {
+        gameManager.roundWin = false;
         gameManager.roundNum++;
         //Wait for round to end
         yield return new WaitForSeconds(1.0f);
@@ -82,6 +83,8 @@ public class BattleManager : MonoBehaviour
             uiManager.SetAllEntityStatsUI(enemiesList, false);
             uiManager.SetAllTargetButtons(enemiesList);
         }
+
+        
     }
 
     private void LoseGame()
@@ -219,7 +222,7 @@ public class BattleManager : MonoBehaviour
     //When switching from player char to player char
     public void NextPlayerTurn()
     {
-        if(CheckIfAllEnemiesDead())
+        if(CheckIfAllEnemiesDead() && gameManager.roundWin)
         {
             Debug.Log("DeactivateActionUI");
             uiManager.DeactivateActionUI();
@@ -450,6 +453,11 @@ public class BattleManager : MonoBehaviour
                 StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
             }
 
+            if (CheckIfAllEnemiesDead())
+            {
+                gameManager.roundWin = true;
+            }
+
             NextPlayerTurn();
         }
 
@@ -549,7 +557,11 @@ public class BattleManager : MonoBehaviour
         {
             StartCoroutine(uiManager.ActivatePlayerDamageUI(currentCharacterGO.CalculateDamage(targetGO), currentCharacterGO.CheckTargetTemperamentWeakness(targetGO)));
         }
-            
+
+        if (CheckIfAllEnemiesDead())
+        {
+            gameManager.roundWin = true;
+        }
 
         //Delete dead enemy
         DeleteDeadEnemies();

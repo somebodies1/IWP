@@ -97,5 +97,6 @@ public class EntitySpawner : MonoBehaviour
                 SpawnEnemyType(enemyList[2], enemySpawnLocation[0]);
                 break;
         }
+        Debug.Log("Spawned Round: " + _roundNum);
     }
 }

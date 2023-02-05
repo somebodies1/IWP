@@ -9,13 +9,15 @@ public class OverallGameManager : MonoBehaviour
 
     public GameObject winloseUI;
     public TextMeshProUGUI winloseText;
-    public int roundNum;
-    public bool gameWin;
+    public int roundNum = 1;
+    public bool gameWin = false;
+    public bool roundWin = false;
 
     private void Start()
     {
         roundNum = 1;
         gameWin = false;
+        roundWin = false;
     }
 
     public void ActivateFinishScreen()
