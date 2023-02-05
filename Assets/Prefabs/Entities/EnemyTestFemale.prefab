@@ -1824,11 +1824,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e4e72be98d25f418e61d600c2447dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityName: Weak1
+  entityName: Weak
   MaxHP: 100
   CurrentHP: 100
   MaxMP: 100
   CurrentMP: 100
+  MaxLB: 100
+  CurrentLB: 0
+  lbList: []
+  lbSkillNum: 0
   attackStat: 10
   defStat: 5
   currentAction: 0
@@ -1837,13 +1841,15 @@ MonoBehaviour:
   fullGuardAmt: 1
   entityType: 1
   tpWeaknessList: 00000000ffffffffffffffffffffffffffffffffffffffffffffffff
-  HealthBar: {fileID: 0}
   entityStatsUI: {fileID: 0}
+  isDead: 0
   animator: {fileID: 8057707200879286921}
   idleClip: {fileID: 7400000, guid: 083c3917822dd164fafb1a91883fbff8, type: 2}
   attackClip: {fileID: 7400000, guid: 33a3f6352f52f9d45bdf449c4ecf1953, type: 2}
   skillClip: {fileID: 7400000, guid: 3e1b2198053972d4e9db7dfa32fbbad2, type: 2}
   guardClip: {fileID: 7400000, guid: af3f9f7d26f2d5d47a394978df788c24, type: 2}
+  lbClipList: []
+  weaponsList: []
 --- !u!114 &8057707200871968750
 MonoBehaviour:
   m_ObjectHideFlags: 0
