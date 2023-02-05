@@ -90,6 +90,7 @@ public class CutsceneManager : MonoBehaviour
 
     public void EndCutscene()
     {
+        textNum = maxTextNum;
         uiManager.cutsceneEnd = true;
         uiManager.DeactivateCutsceneUI();
         uiManager.ActivateMainUI();
